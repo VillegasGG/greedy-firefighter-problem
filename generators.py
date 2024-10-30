@@ -1,4 +1,4 @@
-from utils import Tree
+from tree_utils import Tree
 import networkx as nx
 import numpy as np
 

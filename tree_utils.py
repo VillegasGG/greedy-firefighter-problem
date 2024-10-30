@@ -9,7 +9,6 @@ class Tree:
         self.height = 0
         self.__is_directed__ = False
         self.root = None
-        self.height = 0
         
         if edges_as_matrix:
             self.edges = edges

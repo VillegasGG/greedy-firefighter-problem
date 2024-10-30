@@ -2,7 +2,7 @@ from ctypes import *
 import numpy as np
 
 class Tree:
-    def __init__(self, nodes, edges, nodes_positions=None, edges_as_matrix=False):
+    def __init__(self, nodes, edges, nodes_positions=None, is_adjacency_matrix=False):
         self.nodes = nodes
         if(nodes_positions is not None):
             self.nodes_positions = np.array([nodes_positions[i] for i in self.nodes])
@@ -10,7 +10,7 @@ class Tree:
         self.__is_directed__ = False
         self.root = None
         
-        if edges_as_matrix:
+        if is_adjacency_matrix:
             self.edges = edges
         else:
             self.edges = np.zeros((len(nodes), len(nodes)))
@@ -49,7 +49,7 @@ class Tree:
                     np.copy(self.nodes), 
                     np.copy(self.edges), 
                     None, 
-                    edges_as_matrix=True
+                    is_adjacency_matrix=True
                 )
         
         d_tree.nodes_positions = np.copy(self.nodes_positions)

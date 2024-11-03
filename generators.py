@@ -34,7 +34,7 @@ def generate_positions(n_nodes, edges):
     tree.add_edges_from(edges)
     return nx.drawing.layout.fruchterman_reingold_layout(tree, dim=3, scale=1.)
 
-def tree_from_sequence(sequence, add_positions=True):
+def create_tree_from_sequence(sequence, add_positions=True):
     """
     Crea un árbol a partir de una secuencia de Prüfer.
     """
@@ -77,7 +77,7 @@ def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=T
     """
     Genera un árbol aleatorio con un nodo raíz de un grado especificado.
     """
-    
+
     for i in range(max_trials):
         sequence = generate_prufer_sequence(n_nodes)
         counts = np.bincount(sequence, minlength=n_nodes)
@@ -85,7 +85,7 @@ def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=T
 
         if len(candidate_roots) > 0:
             root = np.random.choice(candidate_roots)
-            return tree_from_sequence(sequence, add_positions), sequence.tolist(), int(root)
+            return create_tree_from_sequence(sequence, add_positions), sequence.tolist(), int(root)
 
     raise ValueError(f"Can't find a tree of {n_nodes} nodes and a root of degree {root_degree} in {max_trials} trials.")
 

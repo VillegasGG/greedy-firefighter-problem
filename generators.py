@@ -62,34 +62,34 @@ def tree_from_sequence(sequence, add_positions=True):
         
     return Tree(np.arange(n_nodes), np.array(edges), positions)
 
-def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=True, max_trials=1000):    
-    
-    sequence = None
-    found_tree = False
+def validate_candidate_roots(type_root_degree, root_degree, counts):
+    """
+    Valida y encuentra los nodos candidatos que cumplen con el criterio de grado raíz
+    """
+    if type_root_degree == "exact":
+        return np.argwhere(counts == root_degree - 1).flatten()
+    elif type_root_degree == "min":
+        return np.argwhere(counts >= root_degree - 1).flatten()
+    else:
+        raise ValueError(f"Root degree type {type_root_degree} not recongized!")
 
+def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=True, max_trials=1000):    
+    """
+    Genera un árbol aleatorio con un nodo raíz de un grado especificado.
+    """
+    
     for i in range(max_trials):
-        
         sequence = generate_prufer_sequence(n_nodes)
         counts = np.bincount(sequence, minlength=n_nodes)
-
-        candidate_roots = None
-
-        if type_root_degree == "exact":
-            candidate_roots = np.argwhere(counts == root_degree - 1).flatten()
-        elif type_root_degree == "min":
-            candidate_roots = np.argwhere(counts >= root_degree - 1).flatten()
-        else:
-            raise ValueError(f"Root degree type {type_root_degree} not recongized!")
+        candidate_roots = validate_candidate_roots(type_root_degree, root_degree, counts)
 
         if len(candidate_roots) > 0:
-            found_tree = True
-            break
+            root = np.random.choice(candidate_roots)
+            return tree_from_sequence(sequence, add_positions), sequence.tolist(), int(root)
 
-    if not found_tree:
-        raise ValueError(f"Can't find a tree of {n_nodes} nodes and a root of degree {root_degree} in {max_trials} trials.")
+    raise ValueError(f"Can't find a tree of {n_nodes} nodes and a root of degree {root_degree} in {max_trials} trials.")
 
 
-    root = np.random.choice(candidate_roots)
-    return tree_from_sequence(sequence, add_positions), sequence.tolist(), int(root)
+    
 
     

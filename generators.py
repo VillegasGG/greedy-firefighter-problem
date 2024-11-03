@@ -1,6 +1,6 @@
-from tree_utils import Tree
 import networkx as nx
 import numpy as np
+from tree_utils import Tree
 
 def generate_prufer_sequence(n_nodes):
     """
@@ -34,16 +34,11 @@ def generate_positions(n_nodes, edges):
     tree.add_edges_from(edges)
     return nx.drawing.layout.fruchterman_reingold_layout(tree, dim=3, scale=1.)
 
-def create_tree_from_sequence(sequence, add_positions=True):
+def construct_edges(sequence, degrees):
     """
-    Crea un árbol a partir de una secuencia de Prüfer.
+    Construye una lista de aristas a partir de una secuencia de nodos y un array de grados.
     """
-
-    n_nodes = sequence.shape[0] + 2
-    degrees = calculate_degrees(sequence, n_nodes)
-    
     edges = []
-
     # Construye las aristas a partir de la secuencia
     for node in sequence:
         leaf = np.argwhere(degrees == 1)[0, 0]
@@ -53,6 +48,16 @@ def create_tree_from_sequence(sequence, add_positions=True):
     remaining_nodes = np.argwhere(degrees == 1)[:, 0]
     assert remaining_nodes.shape[0] == 2, "There are more than 2 remaining degrees = 1"
     edges.append((remaining_nodes[1], remaining_nodes[0]))
+    return edges
+
+def create_tree_from_sequence(sequence, add_positions=True):
+    """
+    Crea un árbol a partir de una secuencia de Prüfer.
+    """
+    n_nodes = sequence.shape[0] + 2
+    degrees = calculate_degrees(sequence, n_nodes)
+    
+    edges = construct_edges(sequence, degrees)
 
     # Genera posiciones de ser necesario
     positions = None
@@ -77,7 +82,6 @@ def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=T
     """
     Genera un árbol aleatorio con un nodo raíz de un grado especificado.
     """
-
     for i in range(max_trials):
         sequence = generate_prufer_sequence(n_nodes)
         counts = np.bincount(sequence, minlength=n_nodes)

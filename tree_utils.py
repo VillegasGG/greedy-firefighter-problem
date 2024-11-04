@@ -3,66 +3,97 @@ import numpy as np
 
 class Tree:
     def __init__(self, nodes, edges, nodes_positions=None, is_adjacency_matrix=False):
+        """
+        Inicializa un objeto Tree
+        """
         self.nodes = nodes
-        if(nodes_positions is not None):
-            self.nodes_positions = np.array([nodes_positions[i] for i in self.nodes])
+        self.nodes_positions = self.initialize_positions(nodes, nodes_positions)
         self.height = 0
         self.__is_directed__ = False
         self.root = None
-        
-        if is_adjacency_matrix:
-            self.edges = edges
-        else:
-            self.edges = np.zeros((len(nodes), len(nodes)))
-
-            for o, d in edges:
-                self.edges[o, d] = 1
-                self.edges[d, o] = 1
+        self.edges = self.initialize_edges(nodes, edges, is_adjacency_matrix)
     
+    def initialize_positions(self, nodes, nodes_positions):
+        """
+        Inicializa las posiciones de los nodos si se proporcionan
+        """
+        if(nodes_positions is not None):
+            return np.array([nodes_positions[i] for i in nodes])
+        return None
+        
+    def initialize_edges(self, nodes, edges, is_adjacency_matrix):
+        """
+        Inicializa la matriz de adyacencia
+        """
+        if is_adjacency_matrix:
+            return edges
+        else:
+            adjacency_matrix = np.zeros((len(nodes), len(nodes)))
+            for o, d in edges:
+                adjacency_matrix[o, d] = 1
+                adjacency_matrix[d, o] = 1
+            return adjacency_matrix
+
     @property
     def is_directed(self):
+        """
+        Indica si el árbol ha sido convertido en dirigido
+        """
         return self.__is_directed__
 
     def add_firefighter_position(self, pos):
+        """
+        Agrega la posición de un bombero al arreglo de posiciones de nodos
+        """
         if (self.nodes_positions.shape[0] == self.nodes.shape[0]):
             self.nodes_positions = np.concatenate((self.nodes_positions, [pos]), axis=0)
         else:
             self.nodes_positions[self.nodes.shape[0]] = pos
 
     def __subtree_to_directed__(self, tree, node, visited):
+        """
+        Convierte un subárbol a un árbol dirigido, comenzando desde el nodo dado
+        """
         height = 0
         max_height = 0
         visited[node] = True
 
-        for o in tree.nodes:
-            if not visited[o] and tree.edges[node][o] != 0:
-                tree.edges[o][node] = 0
-                height = self.__subtree_to_directed__(tree, o, visited)
+        for neighbor in tree.nodes:
+            if not visited[neighbor] and tree.edges[node][neighbor] != 0:
+                tree.edges[neighbor][node] = 0
+                height = self.__subtree_to_directed__(tree, neighbor, visited)
                 if(height > max_height):
                     max_height = height
 
         return 1 + max_height
                 
-    def to_directed(self, root):
-        
-        d_tree = Tree(
+    def convert_to_directed(self, root):
+        """
+        Convierte el árbol en un árbol dirigido y calcula su altura
+        """
+        # Crea una copia del arbol actual
+        directed_tree = Tree(
                     np.copy(self.nodes), 
                     np.copy(self.edges), 
                     None, 
                     is_adjacency_matrix=True
                 )
         
-        d_tree.nodes_positions = np.copy(self.nodes_positions)
+        # Copia las direcciones de los nodos
+        directed_tree.nodes_positions = np.copy(self.nodes_positions)
 
-        visited = [False] * d_tree.nodes.shape[0]
-        height = self.__subtree_to_directed__(d_tree, root, visited)
-        d_tree.__is_directed__ = True
-        d_tree.root = root
-        d_tree.height = height
+        visited = [False] * directed_tree.nodes.shape[0]
+        height = self.__subtree_to_directed__(directed_tree, root, visited)
+        directed_tree.__is_directed__ = True
+        directed_tree.root = root
+        directed_tree.height = height
     
-        return d_tree, height
+        return directed_tree, height
     
     def get_path_to_root(self, node):
+        """
+        Obtiene el camino desde un nodo hasta la raíz del árbol.
+        """
         assert self.__is_directed__, "The tree must be converted to directed"
 
         ancestors = [node]
@@ -80,6 +111,9 @@ class Tree:
         return np.array(ancestors)
 
     def get_subtree_nodes(self, node):
+        """
+        Obtiene todos los nodos en el subárbol a partir de un nodo dado.
+        """
         assert self.__is_directed__, "The tree must be converted to directed"
 
         nodes = [node]

@@ -54,7 +54,13 @@ visualizer.plot_2d_tree_with_root(my_tree, 0)
 
 fire = FirePropagation(my_tree)
 fire.start_fire(0)
+burning_nodes, burned_nodes = fire.display_state()
+step = 0
+visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
 
 while (not fire.is_completely_burned()):
+    step += 1
     fire.propagate()
-    fire.display_state()
+    burning_nodes, burned_nodes = fire.display_state()
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
+

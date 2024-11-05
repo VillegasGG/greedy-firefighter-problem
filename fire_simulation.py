@@ -44,3 +44,5 @@ class FirePropagation:
 
         print("Burning nodes:", burning_nodes)
         print("Burned nodes:", burned_nodes)
+
+        return burning_nodes, burned_nodes

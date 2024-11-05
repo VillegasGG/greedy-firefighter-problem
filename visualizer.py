@@ -88,3 +88,61 @@ class TreeVisualizer:
         G.layout()
         G.draw("grafo_2d.png")
 
+    def plot_fire_state(self, burning_nodes, burned_nodes, step):
+        """
+        Genera y guarda una imagen 3D del estado actual de la propagación del incendio.
+        """
+        fig = go.Figure()
+
+        # Nodos en llamas (burning)
+        fig.add_trace(go.Scatter3d(
+            x=[self.tree.nodes_positions[node, 0] for node in burning_nodes],
+            y=[self.tree.nodes_positions[node, 1] for node in burning_nodes],
+            z=[self.tree.nodes_positions[node, 2] for node in burning_nodes],
+            mode='markers',
+            marker=dict(size=10, color='red'),
+            name='Burning Nodes'
+        ))
+
+        # Nodos quemados (burned)
+        fig.add_trace(go.Scatter3d(
+            x=[self.tree.nodes_positions[node, 0] for node in burned_nodes],
+            y=[self.tree.nodes_positions[node, 1] for node in burned_nodes],
+            z=[self.tree.nodes_positions[node, 2] for node in burned_nodes],
+            mode='markers',
+            marker=dict(size=10, color='black'),
+            name='Burned Nodes'
+        ))
+
+        # Nodos que no han sido quemados ni están en llamas (restantes)
+        all_nodes = set(range(self.tree.nodes_positions.shape[0]))
+        unaffected_nodes = all_nodes - burning_nodes - burned_nodes
+
+        fig.add_trace(go.Scatter3d(
+            x=[self.tree.nodes_positions[node, 0] for node in unaffected_nodes],
+            y=[self.tree.nodes_positions[node, 1] for node in unaffected_nodes],
+            z=[self.tree.nodes_positions[node, 2] for node in unaffected_nodes],
+            mode='markers',
+            marker=dict(size=10, color='blue'),
+            name='Unaffected Nodes'
+        ))
+
+        # Agregar aristas entre nodos
+        for i in range(self.tree.edges.shape[0]):
+            for j in range(self.tree.edges.shape[1]):
+                if self.tree.edges[i, j] == 1:
+                    fig.add_trace(go.Scatter3d(
+                        x=[self.tree.nodes_positions[i, 0], self.tree.nodes_positions[j, 0]],
+                        y=[self.tree.nodes_positions[i, 1], self.tree.nodes_positions[j, 1]],
+                        z=[self.tree.nodes_positions[i, 2], self.tree.nodes_positions[j, 2]],
+                        mode='lines',
+                        line=dict(color='gray', width=2)
+                    ))
+
+        # Configurar la visualización
+        fig.update_layout(title=f'Step {step}: Fire Propagation',
+                        scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
+                        width=700, height=700)
+
+        # Guardar la imagen
+        fig.write_image(f"step_{step}.png")

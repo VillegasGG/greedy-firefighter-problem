@@ -53,6 +53,9 @@ class TreeVisualizer:
         fig.write_html("tree_visualization.html")
     
     def tree_order(self, tree, root):
+        """
+        Recorre el grafo desde la raiz para su correcta visualizacion
+        """
         G = pgv.AGraph()
         adj_matrix = tree.edges
 
@@ -75,10 +78,13 @@ class TreeVisualizer:
         return G
 
     def plot_2d_tree_with_root(self, tree, root):
+        """
+        Gráfica del árbol en 2D
+        """
         G = self.tree_order(tree, root)
         G.write("pygrapghviz.dot")
         G.layout(prog="dot")
-        G.draw("grafo_godot.png")
+        G.draw("grafo_2d_arbol.png")
         G.layout()
-        G.draw("grafo_go.png")
+        G.draw("grafo_2d.png")
 

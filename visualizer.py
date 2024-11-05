@@ -21,7 +21,7 @@ class TreeVisualizer:
                         line=dict(color='gray', width=2)
                     ))
 
-    def plot_3d_tree(self, tree):
+    def plot_3d_tree(self, tree, img_name):
         """
         Grafica el árbol en 3D con Plotly
         """
@@ -50,7 +50,7 @@ class TreeVisualizer:
                         width=700,
                         height=700)
 
-        fig.write_html("tree_visualization.html")
+        fig.write_html(img_name + ".html")
     
     def tree_order(self, tree, root):
         """

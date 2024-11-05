@@ -1,6 +1,7 @@
 import numpy as np
 from tree_utils import Tree
 from visualizer import TreeVisualizer
+from fire_simulation import FirePropagation
 
 # Crear un árbol de ejemplo
 nodes = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
@@ -48,5 +49,12 @@ nodes_positions = [
 my_tree = Tree(nodes, edges, nodes_positions)
 
 visualizer = TreeVisualizer(my_tree)
-visualizer.plot_3d_tree(my_tree)
+visualizer.plot_3d_tree(my_tree, "initial_tree")
 visualizer.plot_2d_tree_with_root(my_tree, 0)
+
+fire = FirePropagation(my_tree)
+fire.start_fire(0)
+
+while (not fire.is_completely_burned()):
+    fire.propagate()
+    fire.display_state()

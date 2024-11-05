@@ -39,5 +39,8 @@ class FirePropagation:
         """
         Estado actual del incendio
         """
-        print("Burned nodes:", self.burned_nodes)
-        print("Burning nodes:", self.burning_nodes)
+        burning_nodes = {int(node) for node in self.burning_nodes}
+        burned_nodes = {int(node) for node in self.burned_nodes}
+
+        print("Burning nodes:", burning_nodes)
+        print("Burned nodes:", burned_nodes)

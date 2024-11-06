@@ -1,6 +1,6 @@
 import time
 import numpy as np
-from tree_utils import Tree
+from src.python.tree_utils import Tree
 from src.python.visualizer import TreeVisualizer
 from src.python.fire_simulation import FirePropagation
 

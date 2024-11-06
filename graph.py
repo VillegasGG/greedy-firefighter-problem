@@ -1,7 +1,10 @@
+import time
 import numpy as np
 from tree_utils import Tree
 from src.python.visualizer import TreeVisualizer
 from src.python.fire_simulation import FirePropagation
+
+start_time = time.perf_counter()
 
 # Crear un árbol de ejemplo
 nodes = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
@@ -64,3 +67,6 @@ while (not fire.is_completely_burned()):
     burning_nodes, burned_nodes = fire.display_state()
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
 
+end_time = time.perf_counter()
+execution_time = end_time - start_time
+print(f"Tiempo de ejecución total: {execution_time:.4f} segundos")

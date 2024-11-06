@@ -86,7 +86,7 @@ class TreeVisualizer:
         G.layout(prog="dot")
         G.draw("images/grafo_2d_arbol.png")
         G.layout()
-        G.draw("imagesgrafo_2d.png")
+        G.draw("images/grafo_2d.png")
 
     def plot_fire_state(self, burning_nodes, burned_nodes, step):
         """

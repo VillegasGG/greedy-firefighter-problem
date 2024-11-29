@@ -12,6 +12,7 @@ class Tree:
         self.__is_directed__ = False
         self.root = None
         self.edges = self.initialize_edges(nodes, edges, is_adjacency_matrix)
+        self.firefighter_positions = []
     
     def initialize_positions(self, nodes, nodes_positions):
         """
@@ -43,12 +44,15 @@ class Tree:
 
     def add_firefighter_position(self, pos):
         """
-        Agrega la posición de un bombero al arreglo de posiciones de nodos
+        Agrega la posición de un bombero al arreglo de posiciones de bomberos
         """
-        if (self.nodes_positions.shape[0] == self.nodes.shape[0]):
-            self.nodes_positions = np.concatenate((self.nodes_positions, [pos]), axis=0)
-        else:
-            self.nodes_positions[self.nodes.shape[0]] = pos
+        self.firefighter_positions.append(pos)
+
+    def get_firefighter_positions(self):
+        """
+        Devuelve las posiciones de los bomberos
+        """
+        return self.firefighter_positions
 
     def __subtree_to_directed__(self, tree, node, visited):
         """

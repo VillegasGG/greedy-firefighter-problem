@@ -1,5 +1,6 @@
 import plotly.graph_objects as go
 import pygraphviz as pgv
+import numpy as np
 
 class TreeVisualizer:
     def __init__(self, tree):
@@ -18,7 +19,8 @@ class TreeVisualizer:
                         y=[self.tree.nodes_positions[i, 1], self.tree.nodes_positions[j, 1]],
                         z=[self.tree.nodes_positions[i, 2], self.tree.nodes_positions[j, 2]],
                         mode='lines',
-                        line=dict(color='gray', width=2)
+                        line=dict(color='gray', width=2),
+                        showlegend=False
                     ))
 
     def plot_3d_tree(self, tree, img_name):
@@ -33,13 +35,23 @@ class TreeVisualizer:
             x=tree.nodes_positions[:, 0],
             y=tree.nodes_positions[:, 1],
             z=tree.nodes_positions[:, 2],
-            mode='markers+text',
+            mode='markers',
             marker=dict(size=10, color='#d2b4de'),
-            text=[str(node) for node in tree.nodes],
-            textposition="top center"
+            name='Nodes'
         ))
 
         self.add_edges(fig)
+
+        firefighter_positions = np.array(tree.get_firefighter_positions())
+        if firefighter_positions.size > 0:
+            fig.add_trace(go.Scatter3d(
+                x=firefighter_positions[:, 0],
+                y=firefighter_positions[:, 1],
+                z=firefighter_positions[:, 2],
+                mode='markers',
+                marker=dict(size=10, color='green'),
+                name='Firefighters'
+            ))
 
         fig.update_layout(title='3D Tree Structure',
                         scene=dict(
@@ -132,14 +144,27 @@ class TreeVisualizer:
             for j in range(self.tree.edges.shape[1]):
                 if self.tree.edges[i, j] == 1:
                     fig.add_trace(go.Scatter3d(
-                        x=[self.tree.nodes_positions[i, 0], self.tree.nodes_positions[j, 0]],
-                        y=[self.tree.nodes_positions[i, 1], self.tree.nodes_positions[j, 1]],
-                        z=[self.tree.nodes_positions[i, 2], self.tree.nodes_positions[j, 2]],
-                        mode='lines',
-                        line=dict(color='gray', width=2)
+                    x=[self.tree.nodes_positions[i, 0], self.tree.nodes_positions[j, 0]],
+                    y=[self.tree.nodes_positions[i, 1], self.tree.nodes_positions[j, 1]],
+                    z=[self.tree.nodes_positions[i, 2], self.tree.nodes_positions[j, 2]],
+                    mode='lines',
+                    line=dict(color='gray', width=2),
+                    showlegend=False
                     ))
 
-        # Configurar la visualización
+        # Agregar posiciones de los bomberos
+        firefighter_positions = np.array(self.tree.get_firefighter_positions())
+        if firefighter_positions.size > 0:
+            fig.add_trace(go.Scatter3d(
+                x=firefighter_positions[:, 0],
+                y=firefighter_positions[:, 1],
+                z=firefighter_positions[:, 2],
+                mode='markers',
+                marker=dict(size=10, color='green'),
+                name='Firefighters'
+            ))
+
+        # Configuracion
         fig.update_layout(title=f'Step {step}: Fire Propagation',
                         scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
                         width=700, height=700)

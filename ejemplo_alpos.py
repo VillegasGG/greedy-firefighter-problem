@@ -1,21 +1,15 @@
 import time
-import numpy as np
-from src.python.tree_utils import Tree
 from src.python.visualizer import TreeVisualizer
 from src.python.fire_simulation import FirePropagation
-from tree_generator import generate_prufer_sequence, calculate_degrees, construct_edges, generate_positions
+from tree_generator import generate_random_tree, add_random_firefighter_position
 
 start_time = time.perf_counter()
 
 n_nodes = 22
-prufer_sequence = generate_prufer_sequence(n_nodes)
-degrees = calculate_degrees(prufer_sequence, n_nodes)
-edges = construct_edges(prufer_sequence, degrees)
-nodes_positions = generate_positions(n_nodes, edges)
-my_tree = Tree(np.arange(n_nodes), edges, nodes_positions)
-my_tree.add_firefighter_position([0.0, 0.5, 0.5])
-my_tree.add_firefighter_position([0.5, 0.5, 0.5])
-my_tree.add_firefighter_position([0.0, 0.5, 0.0])
+my_tree, edges, nodes_positions = generate_random_tree(n_nodes, 5, 'min')
+add_random_firefighter_position(my_tree)
+add_random_firefighter_position(my_tree)
+add_random_firefighter_position(my_tree)
 
 visualizer = TreeVisualizer(my_tree)
 visualizer.plot_3d_tree(my_tree, "images/initial_tree")

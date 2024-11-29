@@ -80,7 +80,7 @@ def validate_candidate_roots(type_root_degree, root_degree, counts):
 
 def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=True, max_trials=1000):    
     """
-    Genera un árbol aleatorio con un nodo raíz de un grado especificado.
+    Genera un árbol aleatorio con un nodo raíz de un grado especificado
     """
     for i in range(max_trials):
         sequence = generate_prufer_sequence(n_nodes)
@@ -93,7 +93,12 @@ def generate_random_tree(n_nodes, root_degree, type_root_degree, add_positions=T
 
     raise ValueError(f"Can't find a tree of {n_nodes} nodes and a root of degree {root_degree} in {max_trials} trials.")
 
-
+def add_random_firefighter_position(tree):
+    """
+    Agrega una posición aleatoria de bombero
+    """
+    initial_position = np.random.rand(3)
+    tree.add_firefighter_position(initial_position)
     
 
     

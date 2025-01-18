@@ -1,3 +1,5 @@
+from src.python.greedy_step import GreedyStep
+
 class FirePropagation:
     def __init__(self, tree):
         self.tree = tree
@@ -46,3 +48,32 @@ class FirePropagation:
         print("Burned nodes:", burned_nodes)
 
         return burning_nodes, burned_nodes
+    
+    def get_candidates(self):
+        """
+        Obtiene los candidatos para ser protegidos
+        """
+        candidates = set()
+        for node in self.burning_nodes:
+            neighbors = self.tree.get_neighbors(node)
+            for neighbor in neighbors:
+                if neighbor not in self.burned_nodes and neighbor not in self.burning_nodes:
+                    candidates.add(neighbor)
+
+        return candidates
+
+    def greedy_step(self):
+        """
+        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
+        """
+        print("Greedy step")
+        burned_and_burning_nodes = self.burned_nodes.union(self.burning_nodes)
+        b_nodes = {int(node) for node in burned_and_burning_nodes}
+        print("Burned and burning nodes:", b_nodes)
+        greedy_step = GreedyStep(self.tree)
+        candidates = self.get_candidates()
+        print("Candidates:", candidates)
+        greedy_step.get_node_to_protect(self.burning_nodes, candidates)
+        # self.tree.protect_node(node_to_protect)
+        # return node_to_protect
+

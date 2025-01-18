@@ -64,8 +64,10 @@ visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
 while (not fire.is_completely_burned()):
     step += 1
     fire.propagate()
+    print(f"Paso {step}")
     burning_nodes, burned_nodes = fire.display_state()
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
+    fire.greedy_step()
 
 end_time = time.perf_counter()
 execution_time = end_time - start_time

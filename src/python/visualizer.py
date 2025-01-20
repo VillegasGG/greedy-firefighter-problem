@@ -35,8 +35,10 @@ class TreeVisualizer:
             x=tree.nodes_positions[:, 0],
             y=tree.nodes_positions[:, 1],
             z=tree.nodes_positions[:, 2],
-            mode='markers',
+            mode='markers+text',
             marker=dict(size=10, color='#d2b4de'),
+            text=[str(i) for i in range(tree.nodes_positions.shape[0])],
+            textposition='top center',
             name='Nodes'
         ))
 

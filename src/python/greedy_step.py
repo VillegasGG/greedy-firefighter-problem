@@ -9,7 +9,6 @@ class GreedyStep():
         for neighbor in neighbors:
             if neighbor not in visited:
                 visited.add(neighbor)
-                print(f"Agregando {neighbor} a visited")
                 self.dfs(neighbor, visited)
 
 
@@ -17,11 +16,26 @@ class GreedyStep():
         """
         Selecciona el nodo a proteger basado en el subarbol más grande
         """
+        
+        # Candidates depths dictionary
+        candidates_depths = {}
+        len_b_nodes = len(b_nodes)
+
         for candidate in candidates:
-            print(f"Candidate: {candidate}")
             visited = set(b_nodes)
             visited.add(candidate)
             self.dfs(candidate, visited)
+            depth = len(visited) - len_b_nodes
+            candidates_depths[candidate] = depth
+
+        if not candidates_depths:
+            raise ValueError("No candidates available to protect.")
+        
+        max_depth = max(candidates_depths.values())
+        node_to_protect =  [node for node, depth in candidates_depths.items() if depth == max_depth][0]
+        print('Node protected: ' + str(int(node_to_protect)) + ' Safe: ' + str(max_depth) + ' nodes')
+
+        return node_to_protect
 
 
             

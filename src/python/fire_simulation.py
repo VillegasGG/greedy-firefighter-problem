@@ -5,6 +5,7 @@ class FirePropagation:
         self.tree = tree
         self.burned_nodes = set()  # Nodes that have already burned
         self.burning_nodes = set()  # Nodes currently on fire
+        self.protected_nodes = set()  # Nodes that have been protected
     
     def start_fire(self, initial_node):
         """
@@ -25,17 +26,24 @@ class FirePropagation:
             neighbors = self.tree.get_neighbors(node)  # Method in the Tree class to get neighboring nodes
             for neighbor in neighbors:
                 if neighbor not in self.burned_nodes and neighbor not in self.burning_nodes:
-                    new_burning_nodes.add(neighbor)
+                    # If node is not defended, it will burn
+                    if neighbor not in self.protected_nodes:
+                        new_burning_nodes.add(neighbor)
         
         # Update the state of the nodes
         self.burned_nodes.update(self.burning_nodes)
         self.burning_nodes = new_burning_nodes
 
-    def is_completely_burned(self):
+    def is_completely_burned(self, burning_nodes, burned_nodes, protected_nodes):
         """
-        Checa si todos los nodos del arbol han sido quemados o no
+        Checa si ya no hay nodos por quemar
         """
-        return len(self.burned_nodes) == len(self.tree.nodes)
+        for node in burning_nodes:
+            neighbors = self.tree.get_neighbors(node)
+            for neighbor in neighbors:
+                if neighbor not in burned_nodes and neighbor not in burning_nodes and neighbor not in protected_nodes:
+                    return False
+        return True
 
     def display_state(self):
         """
@@ -73,6 +81,7 @@ class FirePropagation:
         greedy_step = GreedyStep(self.tree)
         candidates = self.get_candidates()
         node_to_protect = greedy_step.get_node_to_protect(b_nodes, candidates)
-        # self.tree.protect_node(node_to_protect)
-        # return node_to_protect
+        if node_to_protect:
+            self.protected_nodes.add(node_to_protect)
+            print("Protected nodes:", self.protected_nodes)
 

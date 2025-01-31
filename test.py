@@ -47,17 +47,21 @@ visualizer.plot_2d_tree_with_root(my_tree, 0)
 fire = FirePropagation(my_tree)
 fire.start_fire(0)
 burning_nodes, burned_nodes = fire.display_state()
+protected_nodes = fire.protected_nodes
 step = 0
-visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
+visualizer.plot_fire_state(burning_nodes, burned_nodes, step, None)
+visualizer.plot_3d_tree(my_tree, "images/initial_fire")
 
-while (not fire.is_completely_burned()):
+while (not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes)):
     step += 1
+    fire.greedy_step()
     fire.propagate()
     print(f"Paso {step}")
     burning_nodes, burned_nodes = fire.display_state()
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, step)
-    fire.greedy_step()
+    protected_nodes = fire.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
 
+visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
 end_time = time.perf_counter()
 execution_time = end_time - start_time
 print(f"Tiempo de ejecución total: {execution_time:.4f} segundos")

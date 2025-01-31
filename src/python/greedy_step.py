@@ -27,9 +27,11 @@ class GreedyStep():
             self.dfs(candidate, visited)
             depth = len(visited) - len_b_nodes
             candidates_depths[candidate] = depth
+            print('Candidate: ' + str(int(candidate)) + ' Depth: ' + str(depth) + ' nodes')
 
         if not candidates_depths:
-            raise ValueError("No candidates available to protect.")
+            print('No candidates')
+            return None
         
         max_depth = max(candidates_depths.values())
         node_to_protect =  [node for node, depth in candidates_depths.items() if depth == max_depth][0]

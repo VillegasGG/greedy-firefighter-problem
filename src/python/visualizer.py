@@ -200,7 +200,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burning_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burning_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=8, color='black'),
             name='Burning Nodes'
         ))
 
@@ -210,7 +210,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burned_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burned_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=8, color='black'),
             name='Burned Nodes'
         ))
 
@@ -221,7 +221,7 @@ class TreeVisualizer:
                 y=[self.tree.nodes_positions[node, 1] for node in protected_nodes],
                 z=[self.tree.nodes_positions[node, 2] for node in protected_nodes],
                 mode='markers',
-                marker=dict(size=10, color='yellow'),
+                marker=dict(size=8, color='yellow'),
                 name='Protected Nodes'
             ))
 
@@ -237,7 +237,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in unaffected_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in unaffected_nodes],
             mode='markers',
-            marker=dict(size=10, color='blue'),
+            marker=dict(size=8, color='blue'),
             name='Unaffected Nodes'
         ))
 
@@ -262,14 +262,14 @@ class TreeVisualizer:
                 y=firefighter_positions[:, 1],
                 z=firefighter_positions[:, 2],
                 mode='markers',
-                marker=dict(size=10, color='green'),
+                marker=dict(size=8, color='green'),
                 name='Firefighters'
             ))
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',
                         scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
-                        width=700, height=700)
+                        width=900, height=900)
         
         # Guardar html
         fig.write_html("images/final_state.html")

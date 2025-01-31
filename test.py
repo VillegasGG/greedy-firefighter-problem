@@ -19,6 +19,11 @@ def run_fire_simulation(fire, visualizer):
         visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
 
     visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
+    print('-' * 50)
+    print('Datos finales:')
+    print('Numero total de nodos: ' + str(len(my_tree.nodes)))
+    print(f"Daño: {len(burned_nodes) + len(burning_nodes)}")
+    print('-' * 50)
 
 def simulate_fire(my_tree, visualizer, root):
     fire = FirePropagation(my_tree)
@@ -30,9 +35,6 @@ def simulate_fire(my_tree, visualizer, root):
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
 
     run_fire_simulation(fire, visualizer)
-
-
-
 
 visualizer = TreeVisualizer(my_tree)
 visualizer.plot_3d_tree(my_tree, "images/initial_tree")

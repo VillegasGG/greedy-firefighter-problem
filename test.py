@@ -6,6 +6,32 @@ from src.python.fire_simulation import FirePropagation
 
 start_time = time.perf_counter()
 
+def run_fire_simulation(fire, visualizer):
+    step = 0
+    burning_nodes, burned_nodes = fire.display_state()
+    protected_nodes = fire.protected_nodes
+    while not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
+        step += 1
+        fire.greedy_step()
+        fire.propagate()
+        print(f"Paso {step}")
+        burning_nodes, burned_nodes = fire.display_state()
+        protected_nodes = fire.protected_nodes
+        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
+
+def simulate_fire(my_tree, visualizer):
+    fire = FirePropagation(my_tree)
+    fire.start_fire(0)
+    visualizer.plot_3d_tree(my_tree, "images/initial_fire")
+    step = 0
+    burning_nodes, burned_nodes = fire.display_state()
+    protected_nodes = fire.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, None)
+
+    run_fire_simulation(fire, visualizer)
+
+    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
+
 # Crear un árbol de ejemplo
 nodes = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
 edges = [(0, 1), (0, 2), (0, 3), (0, 4), 
@@ -44,24 +70,8 @@ visualizer = TreeVisualizer(my_tree)
 visualizer.plot_3d_tree(my_tree, "images/initial_tree")
 visualizer.plot_2d_tree_with_root(my_tree, 0)
 
-fire = FirePropagation(my_tree)
-fire.start_fire(0)
-burning_nodes, burned_nodes = fire.display_state()
-protected_nodes = fire.protected_nodes
-step = 0
-visualizer.plot_fire_state(burning_nodes, burned_nodes, step, None)
-visualizer.plot_3d_tree(my_tree, "images/initial_fire")
+simulate_fire(my_tree, visualizer)
 
-while (not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes)):
-    step += 1
-    fire.greedy_step()
-    fire.propagate()
-    print(f"Paso {step}")
-    burning_nodes, burned_nodes = fire.display_state()
-    protected_nodes = fire.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
-
-visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
 end_time = time.perf_counter()
 execution_time = end_time - start_time
 print(f"Tiempo de ejecución total: {execution_time:.4f} segundos")

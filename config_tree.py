@@ -1,4 +1,5 @@
 import numpy as np
+from src.python.tree_utils import Tree
 
 nodes = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
 edges = [(0, 1), (0, 2), (0, 3), (0, 4), 
@@ -29,3 +30,5 @@ nodes_positions = [
     [-4, 0, 3],   # Nodo 13
     [-4, 0, 0]    # Nodo 14
 ]
+
+my_tree = Tree(nodes, edges, nodes_positions)

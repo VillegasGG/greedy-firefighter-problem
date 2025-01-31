@@ -1,8 +1,7 @@
 import time
-from src.python.tree_utils import Tree
 from src.python.visualizer import TreeVisualizer
 from src.python.fire_simulation import FirePropagation
-from config_tree import nodes, edges, nodes_positions
+from config_tree2 import my_tree
 
 start_time = time.perf_counter()
 
@@ -19,6 +18,8 @@ def run_fire_simulation(fire, visualizer):
         protected_nodes = fire.protected_nodes
         visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
 
+    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
+
 def simulate_fire(my_tree, visualizer):
     fire = FirePropagation(my_tree)
     fire.start_fire(0)
@@ -26,14 +27,12 @@ def simulate_fire(my_tree, visualizer):
     step = 0
     burning_nodes, burned_nodes = fire.display_state()
     protected_nodes = fire.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, None)
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes)
 
     run_fire_simulation(fire, visualizer)
 
-    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes)
 
-# Crear una instancia de Tree
-my_tree = Tree(nodes, edges, nodes_positions)
+
 
 visualizer = TreeVisualizer(my_tree)
 visualizer.plot_3d_tree(my_tree, "images/initial_tree")

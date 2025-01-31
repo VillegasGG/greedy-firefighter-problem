@@ -3,7 +3,7 @@ class GreedyStep():
         self.tree = tree
         self.burned_nodes = set()
 
-    def dfs(self, node, visited):
+    def dfs(self, node, visited): #Cambiar a iterativo (bfs)
         neighbors = self.tree.get_neighbors(node)
 
         for neighbor in neighbors:

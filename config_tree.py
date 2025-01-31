@@ -32,3 +32,4 @@ nodes_positions = [
 ]
 
 my_tree = Tree(nodes, edges, nodes_positions)
+root = 0

@@ -82,6 +82,7 @@ class FirePropagation:
         greedy_step.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
         node_to_protect = greedy_step.get_node_to_protect(b_nodes, candidates)
+        greedy_step.steps_to_reach_all()
         if node_to_protect:
             self.protected_nodes.add(node_to_protect)
             print("Protected nodes:", self.protected_nodes)

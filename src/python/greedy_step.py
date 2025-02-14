@@ -1,3 +1,5 @@
+from collections import deque
+
 class GreedyStep():
     def __init__(self, tree):
         self.tree = tree
@@ -45,6 +47,39 @@ class GreedyStep():
         print('Node protected: ' + str(int(node_to_protect)) + ' Safe: ' + str(max_depth) + ' nodes')
 
         return node_to_protect
+    
+    
+    # Function to know in how many steps the fire will reach each node
+    def steps_to_reach_all(self):
+        
+        # obtain layers of the tree before the fire with bfs
+        layer = {}
+
+        visited = set()
+        
+        # BFS to get the layers of the tree
+        queue = deque()
+        
+        for node in self.burned_nodes:
+            queue.append(node)
+            visited.add(node)
+            layer[node] = 0
+
+        while queue:
+            s = queue.popleft()
+            neighbors = self.tree.get_neighbors(s)
+
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+                    visited.add(neighbor)
+                    layer[neighbor] = layer[s] + 1
+
+        print('Layers: ' + str(layer))
+
+
+
+
 
 
             

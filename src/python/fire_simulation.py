@@ -1,4 +1,4 @@
-from src.python.greedy_step import GreedyStep
+from python.greedy_step import GreedyStep
 
 class FirePropagation:
     def __init__(self, tree):

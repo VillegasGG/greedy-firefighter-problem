@@ -1,6 +1,11 @@
+import sys
+import os
 import time
-from src.python.visualizer import TreeVisualizer
-from src.python.fire_simulation import FirePropagation
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from python.visualizer import TreeVisualizer
+from python.fire_simulation import FirePropagation
 from config_tree2 import my_tree, root
 
 start_time = time.perf_counter()

@@ -1,7 +1,7 @@
 import time
 from src.python.visualizer import TreeVisualizer
 from src.python.fire_simulation import FirePropagation
-from config_tree2 import my_tree, root
+from config_tree import my_tree, root
 
 start_time = time.perf_counter()
 

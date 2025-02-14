@@ -1,4 +1,4 @@
-from src.python.greedy_step import GreedyStep
+from python.greedy_step import GreedyStep
 
 class FirePropagation:
     def __init__(self, tree):
@@ -79,8 +79,10 @@ class FirePropagation:
         b_nodes = {int(node) for node in burned_and_burning_nodes}
         print("Burned and burning nodes:", b_nodes)
         greedy_step = GreedyStep(self.tree)
+        greedy_step.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
         node_to_protect = greedy_step.get_node_to_protect(b_nodes, candidates)
+        greedy_step.steps_to_reach_all()
         if node_to_protect:
             self.protected_nodes.add(node_to_protect)
             print("Protected nodes:", self.protected_nodes)

@@ -1,4 +1,5 @@
 from python.greedy_step import GreedyStep
+from python.firefighter import Firefighter
 
 class FirePropagation:
     def __init__(self, tree):
@@ -6,6 +7,7 @@ class FirePropagation:
         self.burned_nodes = set()  # Nodes that have already burned
         self.burning_nodes = set()  # Nodes currently on fire
         self.protected_nodes = set()  # Nodes that have been protected
+        self.firefighter = Firefighter(tree)
     
     def start_fire(self, initial_node):
         """
@@ -15,6 +17,9 @@ class FirePropagation:
             self.burning_nodes.add(initial_node)
         else:
             raise ValueError("The initial node does not exist in the tree.")
+        
+        # Add a random firefighter position
+        self.firefighter.add_random_initial_firefighter_position()
 
     def propagate(self):
         """

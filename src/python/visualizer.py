@@ -187,7 +187,7 @@ class TreeVisualizer:
         # Guardar la imagen
         fig.write_image(f"images/steps/step_{step}.png")
     
-    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes):
+    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.
         """
@@ -253,17 +253,16 @@ class TreeVisualizer:
                     showlegend=False
                     ))
 
-        # Agregar posiciones de los bomberos
-        # firefighter_positions = np.array(self.tree.get_firefighter_positions())
-        # if firefighter_positions.size > 0:
-        #     fig.add_trace(go.Scatter3d(
-        #         x=firefighter_positions[:, 0],
-        #         y=firefighter_positions[:, 1],
-        #         z=firefighter_positions[:, 2],
-        #         mode='markers',
-        #         marker=dict(size=8, color='green'),
-        #         name='Firefighters'
-        #     ))
+        # Agregar posicion del bombero
+        if firefighter_position:
+            fig.add_trace(go.Scatter3d(
+                x=[firefighter_position[0]],
+                y=[firefighter_position[1]],
+                z=[firefighter_position[2]],
+                mode='markers',
+                marker=dict(size=10, color='green'),
+                name='Firefighter'
+            ))
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',

@@ -17,7 +17,7 @@ def run_fire_simulation(fire, visualizer):
         print(f"Paso {step}")
         visualizer.plot_fire_state(*fire.display_state(), step, fire.protected_nodes, fire.firefighter.actual_position)
 
-    visualizer.plot_3d_final_state(*fire.display_state(), fire.protected_nodes)
+    visualizer.plot_3d_final_state(*fire.display_state(), fire.protected_nodes, fire.firefighter.actual_position)
     print('-' * 50)
     print(f"Daño: {len(fire.burned_nodes) + len(fire.burning_nodes)}")
     print('-' * 50)

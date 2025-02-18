@@ -44,16 +44,16 @@ class TreeVisualizer:
 
         self.add_edges(fig)
 
-        firefighter_positions = np.array(tree.get_firefighter_positions())
-        if firefighter_positions.size > 0:
-            fig.add_trace(go.Scatter3d(
-                x=firefighter_positions[:, 0],
-                y=firefighter_positions[:, 1],
-                z=firefighter_positions[:, 2],
-                mode='markers',
-                marker=dict(size=10, color='green'),
-                name='Firefighters'
-            ))
+        # firefighter_positions = np.array(tree.get_firefighter_positions())
+        # if firefighter_positions.size > 0:
+        #     fig.add_trace(go.Scatter3d(
+        #         x=firefighter_positions[:, 0],
+        #         y=firefighter_positions[:, 1],
+        #         z=firefighter_positions[:, 2],
+        #         mode='markers',
+        #         marker=dict(size=10, color='green'),
+        #         name='Firefighters'
+        #     ))
 
         fig.update_layout(title='3D Tree Structure',
                         scene=dict(
@@ -102,7 +102,7 @@ class TreeVisualizer:
         G.layout()
         G.draw("images/grafo_2d.png")
 
-    def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes):
+    def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado actual de la propagación del incendio.
         """
@@ -168,17 +168,15 @@ class TreeVisualizer:
                     showlegend=False
                     ))
 
-        # Agregar posiciones de los bomberos
-        firefighter_positions = np.array(self.tree.get_firefighter_positions())
-        if firefighter_positions.size > 0:
-            fig.add_trace(go.Scatter3d(
-                x=firefighter_positions[:, 0],
-                y=firefighter_positions[:, 1],
-                z=firefighter_positions[:, 2],
-                mode='markers',
-                marker=dict(size=10, color='green'),
-                name='Firefighters'
-            ))
+        # Agregar posicion del bombero
+        fig.add_trace(go.Scatter3d(
+            x=[firefighter_position[0]],
+            y=[firefighter_position[1]],
+            z=[firefighter_position[2]],
+            mode='markers',
+            marker=dict(size=10, color='green'),
+            name='Firefighter'
+        ))
 
         # Configuracion
         fig.update_layout(title=f'Step {step}: Fire Propagation',
@@ -188,7 +186,7 @@ class TreeVisualizer:
         # Guardar la imagen
         fig.write_image(f"images/steps/step_{step}.png")
     
-    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes):
+    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.
         """
@@ -254,17 +252,15 @@ class TreeVisualizer:
                     showlegend=False
                     ))
 
-        # Agregar posiciones de los bomberos
-        firefighter_positions = np.array(self.tree.get_firefighter_positions())
-        if firefighter_positions.size > 0:
-            fig.add_trace(go.Scatter3d(
-                x=firefighter_positions[:, 0],
-                y=firefighter_positions[:, 1],
-                z=firefighter_positions[:, 2],
-                mode='markers',
-                marker=dict(size=8, color='green'),
-                name='Firefighters'
-            ))
+        # Agregar posicion del bombero
+        fig.add_trace(go.Scatter3d(
+            x=[firefighter_position[0]],
+            y=[firefighter_position[1]],
+            z=[firefighter_position[2]],
+            mode='markers',
+            marker=dict(size=10, color='green'),
+            name='Firefighter'
+        ))
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',

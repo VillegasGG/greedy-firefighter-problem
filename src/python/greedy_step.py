@@ -20,11 +20,9 @@ class GreedyStep():
                         queue.append(neighbor)
                         visited.add(neighbor)
             
-        print('Visited: ' + str(len(visited)) + ' nodes')
-        print('Visited: ' + str(visited))
         return visited
 
-    def get_node_to_protect(self, b_nodes, candidates):
+    def get_node_to_protect(self, candidates):
         """
         Selecciona el nodo a proteger basado en el subarbol más grande
         """
@@ -63,7 +61,7 @@ class GreedyStep():
         for node in self.burned_nodes:
             queue.append(node)
             visited.add(node)
-            layer[node] = 0
+            layer[int(node)] = 0
 
         while queue:
             s = queue.popleft()
@@ -73,9 +71,9 @@ class GreedyStep():
                 if neighbor not in visited:
                     queue.append(neighbor)
                     visited.add(neighbor)
-                    layer[neighbor] = layer[s] + 1
+                    layer[int(neighbor)] = layer[s] + 1
 
-        print('Layers: ' + str(layer))
+        return layer
 
 
 

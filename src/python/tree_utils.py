@@ -12,7 +12,6 @@ class Tree:
         self.__is_directed__ = False
         self.root = None
         self.edges = self.initialize_edges(nodes, edges, is_adjacency_matrix)
-        self.firefighter_positions = []
     
     def initialize_positions(self, nodes, nodes_positions):
         """
@@ -41,18 +40,6 @@ class Tree:
         Indica si el árbol ha sido convertido en dirigido
         """
         return self.__is_directed__
-
-    def add_firefighter_position(self, pos):
-        """
-        Agrega la posición de un bombero al arreglo de posiciones de bomberos
-        """
-        self.firefighter_positions.append(pos)
-
-    def get_firefighter_positions(self):
-        """
-        Devuelve las posiciones de los bomberos
-        """
-        return self.firefighter_positions
 
     def __subtree_to_directed__(self, tree, node, visited):
         """
@@ -146,7 +133,7 @@ class Tree:
         neighbors = np.argwhere(self.edges[node] == 1).flatten()
         
         return neighbors
-        
+
 class TREE(Structure):
     _fields_ = [
         ("n_nodes", c_uint8),

@@ -15,9 +15,9 @@ def run_fire_simulation(fire, visualizer):
         fire.greedy_step()
         fire.propagate()
         print(f"Paso {step}")
-        visualizer.plot_fire_state(*fire.display_state(), step, fire.protected_nodes)
+        visualizer.plot_fire_state(*fire.display_state(), step, fire.protected_nodes, fire.firefighter.position)
 
-    visualizer.plot_3d_final_state(*fire.display_state(), fire.protected_nodes)
+    visualizer.plot_3d_final_state(*fire.display_state(), fire.protected_nodes, fire.firefighter.position)
     print('-' * 50)
     print(f"Daño: {len(fire.burned_nodes) + len(fire.burning_nodes)}")
     print('-' * 50)
@@ -25,7 +25,7 @@ def run_fire_simulation(fire, visualizer):
 def simulate_fire(tree, visualizer, root):
     fire = FirePropagation(tree)
     fire.start_fire(root)
-    visualizer.plot_fire_state(*fire.display_state(), 0, fire.protected_nodes)
+    visualizer.plot_fire_state(*fire.display_state(), 0, fire.protected_nodes, fire.firefighter.position)
 
     run_fire_simulation(fire, visualizer)
 

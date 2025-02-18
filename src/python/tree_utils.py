@@ -133,7 +133,7 @@ class Tree:
         neighbors = np.argwhere(self.edges[node] == 1).flatten()
         
         return neighbors
-        
+
 class TREE(Structure):
     _fields_ = [
         ("n_nodes", c_uint8),

@@ -64,15 +64,15 @@ class FirePropagation:
 
         return burning_nodes, burned_nodes
     
-    def get_candidates(self):
+    def get_candidates(self, b_nodes):
         """
         Obtiene los candidatos para ser protegidos
         """
         candidates = set()
 
         set_nodes = set(self.tree.nodes)
-        burned_and_burning_nodes = self.burned_nodes.union(self.burning_nodes)
-        unnafected_nodes = set_nodes - burned_and_burning_nodes
+        
+        unnafected_nodes = set_nodes - b_nodes - self.protected_nodes
 
         firefighter_distances = self.get_distances_from_firefighter(unnafected_nodes)
         fire_distances = self.greedy.steps_to_reach_all()
@@ -93,11 +93,12 @@ class FirePropagation:
         b_nodes = {int(node) for node in burned_and_burning_nodes}
         print("Burned and burning nodes:", b_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
-        candidates = self.get_candidates()
-        node_to_protect = self.greedy.get_node_to_protect(b_nodes, candidates)
-        self.greedy.steps_to_reach_all()
+        candidates = self.get_candidates(b_nodes)
+        node_to_protect = self.greedy.get_node_to_protect(candidates)
+        
         if node_to_protect:
             self.protected_nodes.add(node_to_protect)
+            self.firefighter.move_to_node(self.tree.nodes_positions[node_to_protect])
             print("Protected nodes:", self.protected_nodes)
 
     def get_distance_to_node(self, node):
@@ -105,7 +106,7 @@ class FirePropagation:
         Obtiene la distancia de un solo nodo al bombero
         """
         position = self.tree.nodes_positions[node]
-        firefighter_position = self.firefighter.actual_position
+        firefighter_position = self.firefighter.position
         return np.linalg.norm(position - firefighter_position)
 
     def get_distances_from_firefighter(self, nodes):

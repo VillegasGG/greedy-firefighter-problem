@@ -169,15 +169,14 @@ class TreeVisualizer:
                     ))
 
         # Agregar posicion del bombero
-        if firefighter_position:
-            fig.add_trace(go.Scatter3d(
-                x=[firefighter_position[0]],
-                y=[firefighter_position[1]],
-                z=[firefighter_position[2]],
-                mode='markers',
-                marker=dict(size=10, color='green'),
-                name='Firefighter'
-            ))
+        fig.add_trace(go.Scatter3d(
+            x=[firefighter_position[0]],
+            y=[firefighter_position[1]],
+            z=[firefighter_position[2]],
+            mode='markers',
+            marker=dict(size=10, color='green'),
+            name='Firefighter'
+        ))
 
         # Configuracion
         fig.update_layout(title=f'Step {step}: Fire Propagation',
@@ -254,15 +253,14 @@ class TreeVisualizer:
                     ))
 
         # Agregar posicion del bombero
-        if firefighter_position:
-            fig.add_trace(go.Scatter3d(
-                x=[firefighter_position[0]],
-                y=[firefighter_position[1]],
-                z=[firefighter_position[2]],
-                mode='markers',
-                marker=dict(size=10, color='green'),
-                name='Firefighter'
-            ))
+        fig.add_trace(go.Scatter3d(
+            x=[firefighter_position[0]],
+            y=[firefighter_position[1]],
+            z=[firefighter_position[2]],
+            mode='markers',
+            marker=dict(size=10, color='green'),
+            name='Firefighter'
+        ))
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',

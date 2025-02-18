@@ -20,11 +20,9 @@ class GreedyStep():
                         queue.append(neighbor)
                         visited.add(neighbor)
             
-        print('Visited: ' + str(len(visited)) + ' nodes')
-        print('Visited: ' + str(visited))
         return visited
 
-    def get_node_to_protect(self, b_nodes, candidates):
+    def get_node_to_protect(self, candidates):
         """
         Selecciona el nodo a proteger basado en el subarbol más grande
         """

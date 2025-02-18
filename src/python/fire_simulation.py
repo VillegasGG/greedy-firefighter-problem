@@ -1,6 +1,8 @@
 from python.greedy_step import GreedyStep
 from python.firefighter import Firefighter
 
+import numpy as np
+
 class FirePropagation:
     def __init__(self, tree):
         self.tree = tree
@@ -86,9 +88,29 @@ class FirePropagation:
         greedy_step = GreedyStep(self.tree)
         greedy_step.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
+        self.get_distances_from_firefighter()
         node_to_protect = greedy_step.get_node_to_protect(b_nodes, candidates)
         greedy_step.steps_to_reach_all()
         if node_to_protect:
             self.protected_nodes.add(node_to_protect)
             print("Protected nodes:", self.protected_nodes)
 
+    def get_distance_to_node(self, node):
+        """
+        Obtiene la distancia de un solo nodo al bombero
+        """
+        position = self.tree.nodes_positions[node]
+        firefighter_position = self.firefighter.actual_position
+        print(f"Position: {position} Node: {node}")
+        print(f"Firefighter position: {firefighter_position}")
+        print(f"Distance: {np.linalg.norm(position - firefighter_position)}")
+        return np.linalg.norm(position - firefighter_position)
+
+    def get_distances_from_firefighter(self):
+        """
+        Obtiene la distancia de todos los nodos al bombero
+        """
+        distances = {}
+        for node in self.get_candidates():
+            distances[node] = self.get_distance_to_node(node)
+        return distances

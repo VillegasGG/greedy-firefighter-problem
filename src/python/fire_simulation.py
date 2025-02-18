@@ -64,6 +64,15 @@ class FirePropagation:
 
         return burning_nodes, burned_nodes
     
+    def is_protected_by_ancestor(self, node):
+        """
+        Checa si un nodo tiene un ancestro protegido
+        """
+        path = self.tree.get_path_to_root(node)
+        for ancestor in path:
+            if ancestor in self.protected_nodes:
+                return True
+
     def get_candidates(self, b_nodes):
         """
         Obtiene los candidatos para ser protegidos
@@ -79,9 +88,10 @@ class FirePropagation:
 
         for element in unnafected_nodes:
             if firefighter_distances[element] < fire_distances[element]:
-                candidates.add(element)
+                if not self.is_protected_by_ancestor(element):
+                    candidates.add(element)
         
-        print("Candidates:", candidates)
+        print("Candidates:", len(candidates))
         return candidates
 
     def greedy_step(self):

@@ -5,7 +5,7 @@ class GreedyStep():
         self.tree = tree
         self.burned_nodes = set()
 
-    def bfs(self, node): 
+    def get_candidate_subtree(self, node): 
         queue = []
         visited = set()
         visited.add(node)
@@ -31,8 +31,8 @@ class GreedyStep():
         candidates_depths = {}
 
         for candidate in candidates:
-            visited = self.bfs(candidate)
-            depth = len(visited)
+            subtree = self.get_candidate_subtree(candidate)
+            depth = len(subtree)
             candidates_depths[candidate] = depth
             print('Candidate: ' + str(int(candidate)) + ' Depth: ' + str(depth) + ' nodes')
 
@@ -52,7 +52,6 @@ class GreedyStep():
         
         # obtain layers of the tree before the fire with bfs
         layer = {}
-
         visited = set()
         
         # BFS to get the layers of the tree

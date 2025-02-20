@@ -78,6 +78,7 @@ class FirePropagation:
         Obtiene los candidatos para ser protegidos
         """
         candidates = set()
+        final_candidates = set()
 
         set_nodes = set(self.tree.nodes)
         
@@ -85,16 +86,37 @@ class FirePropagation:
 
         firefighter_distances = self.get_distances_from_firefighter(unnafected_nodes)
         fire_distances = self.greedy.steps_to_reach_all()
+        speed = self.firefighter.speed
+      
         print("Unnafected nodes:", len(unnafected_nodes))
 
         for element in unnafected_nodes:
             is_protected = self.is_protected_by_ancestor(element)
             if not is_protected:
                 candidates.add(element)
+
+        # Time taken to reach each candidate
+        time_to_reach = {}
+        for candidate in candidates:
+            time_to_reach[candidate] = firefighter_distances[candidate] / speed
         
-        print("Candidates:", len(candidates))
-        print("Candidates:", candidates)
-        return candidates
+        # Show data:
+        for candidate in candidates:
+            print("Node:", candidate)
+            print("Time to reach:", time_to_reach[candidate])
+            print("Firefighter distance:", firefighter_distances[candidate])
+            print("Speed:", speed)
+            print("")
+
+        # Filter candidates that can be reached before the fire
+        for candidate in candidates:
+            if time_to_reach[candidate] < fire_distances[candidate]:
+                final_candidates.add(candidate)
+
+        
+        print("Candidates:", len(final_candidates))
+        print("Candidates:", final_candidates)
+        return final_candidates
 
     def greedy_step(self):
         """

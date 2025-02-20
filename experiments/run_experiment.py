@@ -30,7 +30,9 @@ def execute_experiment():
     visualizer = TreeVisualizer(my_tree)
     visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     visualizer.plot_2d_tree_with_root(my_tree, root)
+    print("Root:", root)
     simulate_fire(my_tree, visualizer, root)
+    
 
 def main():
     start_time = time.perf_counter()

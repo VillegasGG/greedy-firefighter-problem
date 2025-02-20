@@ -71,6 +71,7 @@ class FirePropagation:
         for ancestor in path:
             if ancestor in self.protected_nodes:
                 return True
+        return False
 
     def get_candidates(self):
         """
@@ -80,17 +81,19 @@ class FirePropagation:
 
         set_nodes = set(self.tree.nodes)
         
-        unnafected_nodes = set_nodes - self.burned_nodes - self.protected_nodes
+        unnafected_nodes = set_nodes - self.burned_nodes - self.protected_nodes - self.burning_nodes
 
         firefighter_distances = self.get_distances_from_firefighter(unnafected_nodes)
         fire_distances = self.greedy.steps_to_reach_all()
+        print("Unnafected nodes:", len(unnafected_nodes))
 
         for element in unnafected_nodes:
-            if firefighter_distances[element] < fire_distances[element]:
-                if not self.is_protected_by_ancestor(element):
-                    candidates.add(element)
+            is_protected = self.is_protected_by_ancestor(element)
+            if not is_protected:
+                candidates.add(element)
         
         print("Candidates:", len(candidates))
+        print("Candidates:", candidates)
         return candidates
 
     def greedy_step(self):

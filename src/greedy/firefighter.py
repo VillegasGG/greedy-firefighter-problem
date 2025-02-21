@@ -5,8 +5,6 @@ Firefighter class:
     - A firefighter can protect a node
 """
 import random
-import numpy as np
-
 
 class Firefighter:
     def __init__(self, tree, speed=1):

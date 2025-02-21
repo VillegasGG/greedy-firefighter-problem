@@ -1,6 +1,6 @@
 import networkx as nx
 import numpy as np
-from python.tree_utils import Tree
+from tree_utils import Tree
 
 def generate_prufer_sequence(n_nodes):
     """

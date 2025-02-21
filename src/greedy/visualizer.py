@@ -1,6 +1,5 @@
 import plotly.graph_objects as go
 import pygraphviz as pgv
-import numpy as np
 
 class TreeVisualizer:
     def __init__(self, tree):

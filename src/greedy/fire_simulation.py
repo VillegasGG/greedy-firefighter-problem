@@ -117,20 +117,6 @@ class FirePropagation:
         print("Candidates:", len(final_candidates))
         return final_candidates
 
-    def greedy_step(self):
-        """
-        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
-        """
-        print("Greedy step")
-        burned_and_burning_nodes = self.burned_nodes.union(self.burning_nodes)
-        self.greedy.burned_nodes = burned_and_burning_nodes
-        candidates = self.get_candidates()
-        node_to_protect = self.greedy.get_node_to_protect(candidates)
-        
-        if node_to_protect:
-            self.protected_nodes.add(node_to_protect)
-            self.firefighter.move_to_node(self.tree.nodes_positions[node_to_protect])
-
     def get_distance_to_node(self, node):
         """
         Obtiene la distancia de un solo nodo al bombero
@@ -147,3 +133,18 @@ class FirePropagation:
         for node in nodes:
             distances[int(node)] = float(self.get_distance_to_node(node))
         return distances
+
+    def greedy_step(self):
+        """
+        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
+        """
+        print("Greedy step")
+        burned_and_burning_nodes = self.burned_nodes.union(self.burning_nodes)
+        self.greedy.burned_nodes = burned_and_burning_nodes
+        candidates = self.get_candidates()
+        node_to_protect = self.greedy.get_node_to_protect(candidates)
+        
+        if node_to_protect:
+            self.protected_nodes.add(node_to_protect)
+            new_firefighter_position = self.tree.nodes_positions[node_to_protect]
+            self.firefighter.move_to_node(new_firefighter_position)

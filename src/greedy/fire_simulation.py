@@ -1,5 +1,5 @@
-from python.greedy_step import GreedyStep
-from python.firefighter import Firefighter
+from greedy.greedy_step import GreedyStep
+from greedy.firefighter import Firefighter
 
 from collections import deque
 
@@ -115,7 +115,6 @@ class FirePropagation:
 
         
         print("Candidates:", len(final_candidates))
-        print("Candidates:", final_candidates)
         return final_candidates
 
     def greedy_step(self):

@@ -47,12 +47,7 @@ class FirePropagation:
                     return False
         return True
 
-
-    
     def is_protected_by_ancestor(self, node):
-        """
-        Checa si un nodo tiene un ancestro protegido
-        """
         path = self.tree.get_path_to_root(node)
         for ancestor in path:
             if ancestor in self.state.protected_nodes:
@@ -88,25 +83,14 @@ class FirePropagation:
             print("Node:", candidate)
             print("Time to reach:", time_to_reach[candidate])
             print("Firefighter distance:", firefighter_distances[candidate])
-            print("Speed:", speed)
-            print("")
 
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
             if time_to_reach[candidate] < fire_distances[candidate]:
                 final_candidates.add(candidate)
-
         
         print("Candidates:", len(final_candidates))
         return final_candidates
-
-    def get_distance_to_node(self, node):
-        """
-        Obtiene la distancia de un solo nodo al bombero
-        """
-        position = self.tree.nodes_positions[node]
-        firefighter_position = self.firefighter.position
-        return np.linalg.norm(position - firefighter_position)
 
     def get_distances_from_firefighter(self, nodes):
         """
@@ -114,7 +98,7 @@ class FirePropagation:
         """
         distances = {}
         for node in nodes:
-            distances[int(node)] = float(self.get_distance_to_node(node))
+            distances[int(node)] = float(self.firefighter.get_distance_to_node(node))
         return distances
 
     def greedy_step(self):

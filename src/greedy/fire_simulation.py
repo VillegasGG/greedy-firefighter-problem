@@ -1,8 +1,6 @@
 from greedy.greedy_step import GreedyStep
 from greedy.firefighter import Firefighter
 
-from collections import deque
-
 import numpy as np
 
 
@@ -52,9 +50,10 @@ class FireState:
 class FirePropagation:
     def __init__(self, tree):
         self.tree = tree
-        self.burned_nodes = set()  # Nodes that have already burned
-        self.burning_nodes = set()  # Nodes currently on fire
-        self.protected_nodes = set()  # Nodes that have been protected
+        self.state = FireState(tree)
+        self.burned_nodes = set()  
+        self.burning_nodes = set()  
+        self.protected_nodes = set() 
         self.firefighter = Firefighter(tree)
         self.greedy = GreedyStep(tree)
 
@@ -68,9 +67,6 @@ class FirePropagation:
         return self.protected_nodes
     
     def start_fire(self, initial_node):
-        """
-        Comienza el fuego en un nodo específico
-        """
         if initial_node in self.tree.nodes:
             self.burning_nodes.add(initial_node)
         else:
@@ -96,6 +92,8 @@ class FirePropagation:
         self.burned_nodes.update(self.burning_nodes)
         self.burning_nodes = new_burning_nodes
 
+        self.state.set_state(self.burning_nodes, self.burned_nodes, self.protected_nodes)
+
     def is_completely_burned(self, burning_nodes, burned_nodes, protected_nodes):
         """
         Checa si ya no hay nodos por quemar
@@ -120,9 +118,6 @@ class FirePropagation:
         return False
 
     def get_candidates(self):
-        """
-        Obtiene los candidatos para ser protegidos
-        """
         candidates = set()
         final_candidates = set()
 

@@ -5,6 +5,50 @@ from collections import deque
 
 import numpy as np
 
+
+class FireState:
+    def __init__(self, tree):
+        self.tree = tree
+        self.burned_nodes = set()  
+        self.burning_nodes = set()
+        self.protected_nodes = set()
+
+    def get_burned_nodes(self):
+        return self.burned_nodes
+    
+    def get_burning_nodes(self):
+        return self.burning_nodes
+    
+    def get_protected_nodes(self):
+        return self.protected_nodes
+    
+    def set_burned_nodes(self, burned_nodes):
+        self.burned_nodes = burned_nodes
+
+    def set_burning_nodes(self, burning_nodes):
+        self.burning_nodes = burning_nodes
+    
+    def set_protected_nodes(self, protected_nodes):
+        self.protected_nodes = protected_nodes
+
+    def set_state(self, burning_nodes, burned_nodes, protected_nodes):
+        self.set_burned_nodes(burned_nodes)
+        self.set_burning_nodes(burning_nodes)
+        self.set_protected_nodes(protected_nodes)
+
+    def display_state(self):
+        """
+        Estado actual del incendio
+        """
+        burning_nodes = {int(node) for node in self.burning_nodes}
+        burned_nodes = {int(node) for node in self.burned_nodes}
+
+        print("Burned: ", burned_nodes)
+        print("Burning: ", burning_nodes)
+
+        return burning_nodes, burned_nodes
+        
+
 class FirePropagation:
     def __init__(self, tree):
         self.tree = tree
@@ -13,6 +57,15 @@ class FirePropagation:
         self.protected_nodes = set()  # Nodes that have been protected
         self.firefighter = Firefighter(tree)
         self.greedy = GreedyStep(tree)
+
+    def getBurnedNodes(self):
+        return self.burned_nodes
+
+    def getBurningNodes(self):
+        return self.burning_nodes
+    
+    def getProtectedNodes(self):
+        return self.protected_nodes
     
     def start_fire(self, initial_node):
         """
@@ -54,14 +107,7 @@ class FirePropagation:
                     return False
         return True
 
-    def display_state(self):
-        """
-        Estado actual del incendio
-        """
-        burning_nodes = {int(node) for node in self.burning_nodes}
-        burned_nodes = {int(node) for node in self.burned_nodes}
 
-        return burning_nodes, burned_nodes
     
     def is_protected_by_ancestor(self, node):
         """

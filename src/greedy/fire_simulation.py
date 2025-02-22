@@ -10,29 +10,12 @@ class FireState:
         self.burned_nodes = set()  
         self.burning_nodes = set()
         self.protected_nodes = set()
-
-    def get_burned_nodes(self):
-        return self.burned_nodes
-    
-    def get_burning_nodes(self):
-        return self.burning_nodes
-    
-    def get_protected_nodes(self):
-        return self.protected_nodes
     
     def set_burned_nodes(self, burned_nodes):
         self.burned_nodes = burned_nodes
 
     def set_burning_nodes(self, burning_nodes):
         self.burning_nodes = burning_nodes
-    
-    def set_protected_nodes(self, protected_nodes):
-        self.protected_nodes = protected_nodes
-
-    def set_state(self, burning_nodes, burned_nodes, protected_nodes):
-        self.set_burned_nodes(burned_nodes)
-        self.set_burning_nodes(burning_nodes)
-        self.set_protected_nodes(protected_nodes)
 
     def display_state(self):
         """
@@ -51,24 +34,12 @@ class FirePropagation:
     def __init__(self, tree):
         self.tree = tree
         self.state = FireState(tree)
-        self.burned_nodes = set()  
-        self.burning_nodes = set()  
-        self.protected_nodes = set() 
         self.firefighter = Firefighter(tree)
         self.greedy = GreedyStep(tree)
-
-    def getBurnedNodes(self):
-        return self.burned_nodes
-
-    def getBurningNodes(self):
-        return self.burning_nodes
-    
-    def getProtectedNodes(self):
-        return self.protected_nodes
     
     def start_fire(self, initial_node):
         if initial_node in self.tree.nodes:
-            self.burning_nodes.add(initial_node)
+            self.state.burning_nodes.add(initial_node)
         else:
             raise ValueError("The initial node does not exist in the tree.")
         
@@ -81,18 +52,16 @@ class FirePropagation:
         """
         new_burning_nodes = set()
         
-        for node in self.burning_nodes:
+        for node in self.state.burning_nodes:
             neighbors = self.tree.get_neighbors(node)  # Method in the Tree class to get neighboring nodes
             for neighbor in neighbors:
-                if neighbor not in self.burned_nodes and neighbor not in self.burning_nodes:
-                    if neighbor not in self.protected_nodes:    # If node is not defended, it will burn
+                if neighbor not in self.state.burned_nodes and neighbor not in self.state.burning_nodes:
+                    if neighbor not in self.state.protected_nodes:    # If node is not defended, it will burn
                         new_burning_nodes.add(neighbor)
         
         # Update the state of the nodes
-        self.burned_nodes.update(self.burning_nodes)
-        self.burning_nodes = new_burning_nodes
-
-        self.state.set_state(self.burning_nodes, self.burned_nodes, self.protected_nodes)
+        self.state.burned_nodes.update(self.state.burning_nodes)
+        self.state.set_burning_nodes(new_burning_nodes)
 
     def is_completely_burned(self, burning_nodes, burned_nodes, protected_nodes):
         """
@@ -113,7 +82,7 @@ class FirePropagation:
         """
         path = self.tree.get_path_to_root(node)
         for ancestor in path:
-            if ancestor in self.protected_nodes:
+            if ancestor in self.state.protected_nodes:
                 return True
         return False
 
@@ -123,7 +92,7 @@ class FirePropagation:
 
         set_nodes = set(self.tree.nodes)
         
-        unnafected_nodes = set_nodes - self.burned_nodes - self.protected_nodes - self.burning_nodes
+        unnafected_nodes = set_nodes - self.state.burned_nodes - self.state.protected_nodes - self.state.burning_nodes
 
         firefighter_distances = self.get_distances_from_firefighter(unnafected_nodes)
         fire_distances = self.greedy.steps_to_reach_all()
@@ -180,12 +149,12 @@ class FirePropagation:
         Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
         """
         print("Greedy step")
-        burned_and_burning_nodes = self.burned_nodes.union(self.burning_nodes)
+        burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
         node_to_protect = self.greedy.get_node_to_protect(candidates)
         
         if node_to_protect:
-            self.protected_nodes.add(node_to_protect)
+            self.state.protected_nodes.add(node_to_protect)
             new_firefighter_position = self.tree.nodes_positions[node_to_protect]
             self.firefighter.move_to_node(new_firefighter_position)

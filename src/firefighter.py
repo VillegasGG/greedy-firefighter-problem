@@ -1,9 +1,3 @@
-"""
-Firefighter class:
-    - A firefighter has position and speed
-    - A firefighter can move to a position
-    - A firefighter can protect a node
-"""
 import random
 
 class Firefighter:

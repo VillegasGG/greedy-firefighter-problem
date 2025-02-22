@@ -4,7 +4,7 @@ import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from greedy.visualizer import TreeVisualizer
+from visualizer import TreeVisualizer
 from greedy.fire_simulation import FirePropagation
 from config_tree import my_tree, root
 

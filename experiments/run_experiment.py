@@ -52,14 +52,13 @@ def execute_experiment():
     visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     visualizer.plot_2d_tree_with_root(my_tree, root)
     print("Root:", root)
-    simulate_fire(my_tree, visualizer, root)
-    
-
-def main():
     start_time = time.perf_counter()
-    execute_experiment()
+    simulate_fire(my_tree, visualizer, root)
     end_time = time.perf_counter()
     print(f"Tiempo de ejecución total: {end_time - start_time:.4f} segundos")
+
+def main():
+    execute_experiment()
 
 if __name__ == "__main__":
     main()

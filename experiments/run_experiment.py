@@ -27,13 +27,13 @@ def run_fire_simulation(fire, visualizer):
     print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
 
 def simulate_fire(tree, visualizer, root):
-    fire = FirePropagation(tree)
-    fire.start_fire(root)
-    burned_nodes = fire.state.burned_nodes
-    burning_nodes = fire.state.burning_nodes
-    protected_nodes = fire.state.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, fire.firefighter.position)
-    run_fire_simulation(fire, visualizer)
+    simulation = FirePropagation(tree)
+    simulation.start_fire(root)
+    burned_nodes = simulation.state.burned_nodes
+    burning_nodes = simulation.state.burning_nodes
+    protected_nodes = simulation.state.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, simulation.firefighter.position)
+    run_fire_simulation(simulation, visualizer)
 
 def execute_experiment():
     visualizer = TreeVisualizer(my_tree)

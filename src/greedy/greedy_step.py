@@ -27,7 +27,6 @@ class GreedyStep():
         Selecciona el nodo a proteger basado en el subarbol más grande
         """
         
-        # Candidates depths dictionary
         candidates_depths = {}
 
         for candidate in candidates:
@@ -50,7 +49,6 @@ class GreedyStep():
     # Function to know in how many steps the fire will reach each node
     def steps_to_reach_all(self):
         
-        # obtain layers of the tree before the fire with bfs
         layer = {}
         visited = set()
         

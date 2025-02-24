@@ -73,8 +73,7 @@ class FirePropagation:
             if not is_protected:
                 candidates.add(element)
 
-        # Time taken to reach each candidate
-        time_to_reach = {}
+        time_to_reach = {} # Time taken to reach each candidate
         for candidate in candidates:
             time_to_reach[candidate] = firefighter_distances[candidate] / speed
         

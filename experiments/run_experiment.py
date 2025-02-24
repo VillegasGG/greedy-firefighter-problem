@@ -4,27 +4,36 @@ import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from greedy.visualizer import TreeVisualizer
+from visualizer import TreeVisualizer
 from greedy.fire_simulation import FirePropagation
-from config_tree2 import my_tree, root
+from config_tree import my_tree, root
 
 def run_fire_simulation(fire, visualizer):
     step = 0
-    while not fire.is_completely_burned(*fire.display_state(), fire.protected_nodes):
+    burning_nodes = fire.state.burning_nodes
+    burned_nodes = fire.state.burned_nodes
+    protected_nodes = fire.state.protected_nodes
+    while not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
         step += 1
         fire.greedy_step()
         fire.propagate()
         print(f"Paso {step}")
-        visualizer.plot_fire_state(*fire.display_state(), step, fire.protected_nodes, fire.firefighter.position)
+        burning_nodes = fire.state.burning_nodes
+        burned_nodes = fire.state.burned_nodes
+        protected_nodes = fire.state.protected_nodes
+        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, fire.firefighter.position)
 
-    visualizer.plot_3d_final_state(*fire.display_state(), fire.protected_nodes, fire.firefighter.position)
-    print('-' * 50 + f"\nDaño: {len(fire.burned_nodes) + len(fire.burning_nodes)}\n" + '-' * 50)
+    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes, fire.firefighter.position)
+    print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
 
 def simulate_fire(tree, visualizer, root):
-    fire = FirePropagation(tree)
-    fire.start_fire(root)
-    visualizer.plot_fire_state(*fire.display_state(), 0, fire.protected_nodes, fire.firefighter.position)
-    run_fire_simulation(fire, visualizer)
+    simulation = FirePropagation(tree)
+    simulation.start_fire(root)
+    burned_nodes = simulation.state.burned_nodes
+    burning_nodes = simulation.state.burning_nodes
+    protected_nodes = simulation.state.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, simulation.firefighter.position)
+    run_fire_simulation(simulation, visualizer)
 
 def execute_experiment():
     visualizer = TreeVisualizer(my_tree)

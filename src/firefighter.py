@@ -1,13 +1,8 @@
-"""
-Firefighter class:
-    - A firefighter has position and speed
-    - A firefighter can move to a position
-    - A firefighter can protect a node
-"""
 import random
+import numpy as np
 
 class Firefighter:
-    def __init__(self, tree, speed=1):
+    def __init__(self, tree, speed=3):
         self.speed = speed
         self.position = None
         self.tree = tree
@@ -26,3 +21,7 @@ class Firefighter:
         )
 
         self.position = random_point
+
+    def get_distance_to_node(self, node):
+        position_node = self.tree.nodes_positions[node]
+        return np.linalg.norm(position_node - self.position)    

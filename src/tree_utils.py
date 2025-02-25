@@ -33,6 +33,21 @@ class Tree:
                 adjacency_matrix[o, d] = 1
                 adjacency_matrix[d, o] = 1
             return adjacency_matrix
+        
+    def save_positions_to_json(self, filename):
+        with open(filename, "w") as file:
+            for i in range(self.nodes.shape[0]):
+                file.write(f"{self.nodes[i]} {self.nodes_positions[i][0]} {self.nodes_positions[i][1]} {self.nodes_positions[i][2]} ")
+                file.write("\n")
+
+    def save_edges_to_json(self, filename):
+        with open(filename, "w") as file:
+            file.write(f"{self.root}\n")
+            for i in range(self.edges.shape[0]):
+                for j in range(self.edges.shape[1]):
+                    if self.edges[i][j] == 1:
+                        file.write(f"{i} {j}\n")
+
 
     @property
     def is_directed(self):

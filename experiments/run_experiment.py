@@ -51,6 +51,8 @@ def execute_experiment():
     visualizer = TreeVisualizer(my_tree)
     visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     visualizer.plot_2d_tree_with_root(my_tree, root)
+    my_tree.save_positions_to_json("positions.txt")
+    my_tree.save_edges_to_json("edges.txt")
     print("Root:", root)
     start_time = time.perf_counter()
     simulate_fire(my_tree, visualizer, root)

@@ -148,7 +148,7 @@ class TreeVisualizer:
                         width=700, height=700)
 
         # Guardar la imagen
-        fig.write_image(f"images/steps/step_{step}.png")
+        fig.write_image(f"images/states/state_{step}.png")
 
     def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """

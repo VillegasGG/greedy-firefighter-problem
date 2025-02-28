@@ -77,9 +77,7 @@ class Simulation:
         
         # Show data:
         for candidate in candidates:
-            print("Node:", candidate)
-            print("Time to reach:", time_to_reach[candidate])
-            print("Firefighter distance:", firefighter_distances[candidate])
+            print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]}')
 
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
@@ -136,7 +134,5 @@ class Simulation:
         else:
             self.firefighter_action()
             self.propagate()
-        
-        print("Remaining time: ", self.firefighter.get_remaining_time())
         
         

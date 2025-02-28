@@ -23,9 +23,11 @@ def execute_experiment():
     
     while not simulation.is_completely_burned():
         step += 1
+        if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
         simulation.execute_step()
-        print(f"Paso {step}")
         vizualize_state(simulation, step)
+        
+    print('#' * 50)
 
     visualizer.plot_3d_final_state(simulation.state.burning_nodes, simulation.state.burned_nodes, simulation.state.protected_nodes, simulation.firefighter.position)
     print('-' * 50 + f"\nDaño: {len(simulation.state.burned_nodes) + len(simulation.state.burning_nodes)}\n" + '-' * 50)

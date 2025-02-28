@@ -77,8 +77,8 @@ class Simulation:
         
         # Show data:
         for candidate in candidates:
-            print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]}')
-
+            print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]} | Time to burn: {fire_distances[candidate]}')
+            
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
             if time_to_reach[candidate] < fire_distances[candidate]:

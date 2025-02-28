@@ -39,7 +39,7 @@ class GreedyStep():
 
         if not candidates_depths:
             print('No candidates')
-            return None
+            return None, None
         
         max_depth = max(candidates_depths.values())
         node_to_protect =  [node for node, depth in candidates_depths.items() if depth == max_depth][0]

@@ -1,8 +1,6 @@
 from greedy.greedy_step import GreedyStep
 from firefighter import Firefighter
 from fire_state import FireState
-
-import numpy as np
 class Simulation:
     def __init__(self, tree):
         self.tree = tree
@@ -104,7 +102,6 @@ class Simulation:
         """
         Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
         """
-        print("Greedy step")
         burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
@@ -119,11 +116,17 @@ class Simulation:
     def execute_step(self):
         """
         Ejecuta un paso de la simulacion:
-        1. Inicio del fuego o propagacion
-        2. Turno del bombero (si fue propagacion)
+        A) Si no hay nodos quemados:
+            - Se inicia el fuego en el nodo raiz
+            - Se coloca un bombero en una posicion aleatoria
+        B) Si hay nodos quemados:
+            - Turno del bombero dado que el anterior fue propagacion o inicio del fuego
+            - Turno de la propagacion del fuego
         """
         if not self.state.burning_nodes:
             self.start_fire(self.tree.root)
         else:
-            self.propagate()
             self.select_node_to_protect()
+            self.propagate()
+        
+        

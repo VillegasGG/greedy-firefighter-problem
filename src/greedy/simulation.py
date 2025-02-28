@@ -78,7 +78,7 @@ class Simulation:
         # Show data:
         for candidate in candidates:
             print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]} | Time to burn: {fire_distances[candidate]}')
-            
+
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
             if time_to_reach[candidate] < fire_distances[candidate]:
@@ -98,7 +98,7 @@ class Simulation:
 
     def select_node_to_protect(self):
         """
-        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
+        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
         """
         burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
@@ -107,20 +107,31 @@ class Simulation:
         print(node_to_protect, node_time)
         
         if node_to_protect:
-            self.state.protected_nodes.add(node_to_protect)
-            new_firefighter_position = self.tree.nodes_positions[node_to_protect]
-            self.firefighter.move_to_node(new_firefighter_position)
-            self.firefighter.decrease_remaining_time(node_time)
+            node_pos = self.tree.nodes_positions[node_to_protect]
+            if(self.firefighter.get_remaining_time() >= node_time):
+                self.state.protected_nodes.add(node_to_protect)
+                self.firefighter.move_to_node(node_pos, node_time)
+            else:
+                self.firefighter.move_fraction(node_pos, node_time)
+                
+            return True
+
+        else:
+            print('No node to protect')
+            return False
 
     def firefighter_action(self):
         """
         Turno del bombero
         """
-        self.select_node_to_protect()
-        print('-' * 50)
-        print('Firefighter info: ')
-        print(f'Position: {self.firefighter.position} | Remaining time: {self.firefighter.get_remaining_time()}')
-        print('-' * 50)
+        exist_candidate = True
+
+        while(self.firefighter.get_remaining_time() > 0 and exist_candidate):
+            exist_candidate = self.select_node_to_protect()
+            print('-' * 50)
+            print('Firefighter info: ')
+            print(f'Position: {self.firefighter.position} | Remaining time: {self.firefighter.get_remaining_time()}')
+            print('-' * 50)
 
     def execute_step(self):
         """

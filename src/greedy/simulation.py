@@ -112,6 +112,12 @@ class Simulation:
             self.state.protected_nodes.add(node_to_protect)
             new_firefighter_position = self.tree.nodes_positions[node_to_protect]
             self.firefighter.move_to_node(new_firefighter_position)
+
+    def firefighter_action(self):
+        """
+        Turno del bombero
+        """
+        self.select_node_to_protect()
         
     def execute_step(self):
         """
@@ -123,10 +129,14 @@ class Simulation:
             - Turno del bombero dado que el anterior fue propagacion o inicio del fuego
             - Turno de la propagacion del fuego
         """
+        self.firefighter.init_remaining_time()
+
         if not self.state.burning_nodes:
             self.start_fire(self.tree.root)
         else:
-            self.select_node_to_protect()
+            self.firefighter_action()
             self.propagate()
+        
+        print("Remaining time: ", self.firefighter.get_remaining_time())
         
         

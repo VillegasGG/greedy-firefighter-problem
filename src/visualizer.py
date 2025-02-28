@@ -64,40 +64,6 @@ class TreeVisualizer:
                 height=700)
 
         fig.write_html(img_name + ".html")
-    
-    def tree_order(self, tree, root):
-        """
-        Recorre el grafo desde la raiz para su correcta visualizacion
-        """
-        G = pgv.AGraph()
-        adj_matrix = tree.edges
-
-        G.add_node(root)
-        stack = [root]
-        visitados = set() 
-
-        while stack:
-            actual = stack.pop() 
-            if actual not in visitados:
-                visitados.add(actual) 
-
-                for posicion in range(len(adj_matrix[actual])):
-                    if adj_matrix[actual][posicion] == 1: 
-                        G.add_node(posicion)
-                        G.add_edge(actual, posicion) 
-                        
-                        if posicion not in visitados:
-                            stack.append(posicion) 
-        return G
-
-    def plot_2d_tree_with_root(self, tree, root):
-        """
-        Gráfica del árbol en 2D 
-        """
-        G = self.tree_order(tree, root)
-        G.write("pygrapghviz.dot")
-        G.layout(prog="dot")
-        G.draw("images/grafo_2d_arbol.png")
 
     def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes, firefighter_position):
         """
@@ -184,6 +150,7 @@ class TreeVisualizer:
 
         # Guardar la imagen
         fig.write_image(f"images/steps/step_{step}.png")
+        
     def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.

@@ -8,22 +8,22 @@ from visualizer import TreeVisualizer
 from greedy.simulation import Simulation
 from config_tree import my_tree, root
 
-def run_fire_simulation(fire, visualizer):
+def run_fire_simulation(simulation, visualizer):
     step = 0
-    burning_nodes = fire.state.burning_nodes
-    burned_nodes = fire.state.burned_nodes
-    protected_nodes = fire.state.protected_nodes
-    while not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
+    burning_nodes = simulation.state.burning_nodes
+    burned_nodes = simulation.state.burned_nodes
+    protected_nodes = simulation.state.protected_nodes
+    while not simulation.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
         step += 1
-        fire.select_node_to_protect()
-        fire.propagate()
+        simulation.select_node_to_protect()
+        simulation.propagate()
         print(f"Paso {step}")
-        burning_nodes = fire.state.burning_nodes
-        burned_nodes = fire.state.burned_nodes
-        protected_nodes = fire.state.protected_nodes
-        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, fire.firefighter.position)
+        burning_nodes = simulation.state.burning_nodes
+        burned_nodes = simulation.state.burned_nodes
+        protected_nodes = simulation.state.protected_nodes
+        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.firefighter.position)
 
-    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes, fire.firefighter.position)
+    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes, simulation.firefighter.position)
     print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
 
 def simulate_fire(tree, visualizer, root):
@@ -38,7 +38,6 @@ def simulate_fire(tree, visualizer, root):
 def execute_experiment():
     visualizer = TreeVisualizer(my_tree)
     visualizer.plot_3d_tree(my_tree, "images/initial_tree")
-    visualizer.plot_2d_tree_with_root(my_tree, root)
     print("Root:", root)
     simulate_fire(my_tree, visualizer, root)
     

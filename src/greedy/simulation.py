@@ -98,12 +98,13 @@ class Simulation:
 
     def select_node_to_protect_and_move(self):
         """
-        Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
+        - Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
+        - Se mueve el bombero al nodo seleccionado
         """
         burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
-        node_to_protect, node_time = self.greedy.get_node_to_protect(candidates)
+        node_to_protect, node_time = self.greedy.get_node_to_protect(candidates, self.firefighter)
         print(node_to_protect, node_time)
         
         if node_to_protect:

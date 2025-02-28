@@ -1,5 +1,4 @@
 import plotly.graph_objects as go
-import pygraphviz as pgv
 
 class TreeVisualizer:
     def __init__(self, tree):
@@ -150,7 +149,7 @@ class TreeVisualizer:
 
         # Guardar la imagen
         fig.write_image(f"images/steps/step_{step}.png")
-        
+
     def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.

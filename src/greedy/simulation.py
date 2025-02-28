@@ -35,7 +35,7 @@ class Simulation:
         """
         Checa si ya no hay nodos por quemar
         """
-        if not self.state.burning_nodes:
+        if not self.state.burning_nodes and not self.state.burned_nodes:
             return False
 
         for node in self.state.burning_nodes:

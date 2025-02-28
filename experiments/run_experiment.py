@@ -7,12 +7,19 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 from visualizer import TreeVisualizer
 from greedy.simulation import Simulation
 from config_tree import my_tree, root
-
-def run_fire_simulation(simulation, visualizer):
-    step = 0
-    burning_nodes = simulation.state.burning_nodes
+   
+def execute_experiment():
+    visualizer = TreeVisualizer(my_tree)
+    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
+    simulation = Simulation(my_tree)
+    simulation.start_fire(root)
     burned_nodes = simulation.state.burned_nodes
+    burning_nodes = simulation.state.burning_nodes
     protected_nodes = simulation.state.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, simulation.firefighter.position)
+    
+    step = 0
+
     while not simulation.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
         step += 1
         simulation.select_node_to_protect()
@@ -25,22 +32,6 @@ def run_fire_simulation(simulation, visualizer):
 
     visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes, simulation.firefighter.position)
     print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
-
-def simulate_fire(tree, visualizer, root):
-    simulation = Simulation(tree)
-    simulation.start_fire(root)
-    burned_nodes = simulation.state.burned_nodes
-    burning_nodes = simulation.state.burning_nodes
-    protected_nodes = simulation.state.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, simulation.firefighter.position)
-    run_fire_simulation(simulation, visualizer)
-
-def execute_experiment():
-    visualizer = TreeVisualizer(my_tree)
-    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
-    print("Root:", root)
-    simulate_fire(my_tree, visualizer, root)
-    
 
 def main():
     start_time = time.perf_counter()

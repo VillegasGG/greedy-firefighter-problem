@@ -52,6 +52,7 @@ def main():
     nodes_positions = create_positions_dict(nodes, positions)
     expected_burning_nodes, expected_burned_nodes, expected_protected_nodes = load_expected_results("data/" + str(experiment) + "/" + "results.json")
 
+    tree = Tree(np.array(nodes), np.array(edges), nodes_positions)
 
 if __name__ == "__main__":
     main()

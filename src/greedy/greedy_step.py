@@ -28,12 +28,14 @@ class GreedyStep():
         """
         
         candidates_depths = {}
+        candidates_time = {}
 
         for candidate in candidates:
-            subtree = self.get_candidate_subtree(candidate)
+            subtree = self.get_candidate_subtree(candidate[0])
             depth = len(subtree)
-            candidates_depths[candidate] = depth
-            print('Candidate: ' + str(int(candidate)) + ' Depth: ' + str(depth) + ' nodes')
+            candidates_depths[candidate[0]] = depth
+            candidates_time[candidate[0]] = candidate[1]
+            print('Candidate: ' + str(int(candidate[0])) + ' Depth: ' + str(depth) + ' nodes')
 
         if not candidates_depths:
             print('No candidates')
@@ -43,7 +45,7 @@ class GreedyStep():
         node_to_protect =  [node for node, depth in candidates_depths.items() if depth == max_depth][0]
         print('Node protected: ' + str(int(node_to_protect)) + ' Safe: ' + str(max_depth) + ' nodes')
 
-        return node_to_protect
+        return node_to_protect, candidates_time[node_to_protect]
     
     
     # Function to know in how many steps the fire will reach each node

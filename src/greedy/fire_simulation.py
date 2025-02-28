@@ -86,7 +86,7 @@ class FirePropagation:
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
             if time_to_reach[candidate] < fire_distances[candidate]:
-                final_candidates.add(candidate)
+                final_candidates.add((candidate, time_to_reach[candidate]))
         
         print("Candidates:", len(final_candidates))
         return final_candidates
@@ -100,7 +100,7 @@ class FirePropagation:
             distances[int(node)] = float(self.firefighter.get_distance_to_node(node))
         return distances
 
-    def greedy_step(self):
+    def select_node_to_protect(self):
         """
         Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande
         """
@@ -108,7 +108,8 @@ class FirePropagation:
         burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
-        node_to_protect = self.greedy.get_node_to_protect(candidates)
+        node_to_protect, node_time = self.greedy.get_node_to_protect(candidates)
+        print(node_to_protect, node_time)
         
         if node_to_protect:
             self.state.protected_nodes.add(node_to_protect)

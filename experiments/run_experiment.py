@@ -15,7 +15,7 @@ def run_fire_simulation(fire, visualizer):
     protected_nodes = fire.state.protected_nodes
     while not fire.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
         step += 1
-        fire.greedy_step()
+        fire.select_node_to_protect()
         fire.propagate()
         print(f"Paso {step}")
         burning_nodes = fire.state.burning_nodes

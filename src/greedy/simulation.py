@@ -110,13 +110,18 @@ class Simulation:
             self.state.protected_nodes.add(node_to_protect)
             new_firefighter_position = self.tree.nodes_positions[node_to_protect]
             self.firefighter.move_to_node(new_firefighter_position)
+            self.firefighter.decrease_remaining_time(node_time)
 
     def firefighter_action(self):
         """
         Turno del bombero
         """
         self.select_node_to_protect()
-        
+        print('-' * 50)
+        print('Firefighter info: ')
+        print(f'Position: {self.firefighter.position} | Remaining time: {self.firefighter.get_remaining_time()}')
+        print('-' * 50)
+
     def execute_step(self):
         """
         Ejecuta un paso de la simulacion:

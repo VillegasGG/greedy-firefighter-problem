@@ -29,9 +29,9 @@ class Firefighter:
     
     def init_remaining_time(self):
         self.__remaining_time__ = 1
-
-    def update_remaining_time(self):
-        self.__remaining_time__ -= 1
     
     def get_remaining_time(self):
         return self.__remaining_time__
+    
+    def decrease_remaining_time(self, time_to_decrease):
+        self.__remaining_time__ -= time_to_decrease

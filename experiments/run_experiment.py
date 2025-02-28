@@ -17,16 +17,13 @@ def vizualize_state(simulation, step):
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.firefighter.position)
    
 def execute_experiment():
-    step = 0
+    step = -1
     visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     simulation = Simulation(my_tree)
-    simulation.start_fire(root)
-    vizualize_state(simulation, step)
     
     while not simulation.is_completely_burned():
         step += 1
-        simulation.select_node_to_protect()
-        simulation.propagate()
+        simulation.execute_step()
         print(f"Paso {step}")
         vizualize_state(simulation, step)
 

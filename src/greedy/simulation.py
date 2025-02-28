@@ -20,9 +20,6 @@ class Simulation:
         self.firefighter.add_random_initial_firefighter_position()
 
     def propagate(self):
-        """
-        Simula un paso de la propagación del fuego
-        """
         new_burning_nodes = set()
         
         for node in self.state.burning_nodes:
@@ -40,6 +37,9 @@ class Simulation:
         """
         Checa si ya no hay nodos por quemar
         """
+        if not self.state.burning_nodes:
+            return False
+
         for node in self.state.burning_nodes:
             neighbors = self.tree.get_neighbors(node)
             for neighbor in neighbors:
@@ -115,3 +115,15 @@ class Simulation:
             self.state.protected_nodes.add(node_to_protect)
             new_firefighter_position = self.tree.nodes_positions[node_to_protect]
             self.firefighter.move_to_node(new_firefighter_position)
+        
+    def execute_step(self):
+        """
+        Ejecuta un paso de la simulacion:
+        1. Inicio del fuego o propagacion
+        2. Turno del bombero (si fue propagacion)
+        """
+        if not self.state.burning_nodes:
+            self.start_fire(self.tree.root)
+        else:
+            self.propagate()
+            self.select_node_to_protect()

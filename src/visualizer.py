@@ -55,13 +55,13 @@ class TreeVisualizer:
         #     ))
 
         fig.update_layout(title='3D Tree Structure',
-                        scene=dict(
-                            xaxis_title='X Axis',
-                            yaxis_title='Y Axis',
-                            zaxis_title='Z Axis'
-                        ),
-                        width=700,
-                        height=700)
+                scene=dict(
+                    xaxis=dict(title='X Axis', range=[-1, 1]),
+                    yaxis=dict(title='Y Axis', range=[-1, 1]),
+                    zaxis=dict(title='Z Axis', range=[-1, 1])
+                ),
+                width=700,
+                height=700)
 
         fig.write_html(img_name + ".html")
     
@@ -177,12 +177,13 @@ class TreeVisualizer:
 
         # Configuracion
         fig.update_layout(title=f'Step {step}: Fire Propagation',
-                        scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
+                        scene=dict(xaxis=dict(title='X Axis', range=[-1, 1]),
+                                   yaxis=dict(title='Y Axis', range=[-1, 1]),
+                                   zaxis=dict(title='Z Axis', range=[-1, 1])),
                         width=700, height=700)
 
         # Guardar la imagen
         fig.write_image(f"images/steps/step_{step}.png")
-    
     def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.
@@ -261,8 +262,10 @@ class TreeVisualizer:
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',
-                        scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
-                        width=900, height=900)
+                scene=dict(xaxis=dict(title='X Axis', range=[-1, 1]),
+                       yaxis=dict(title='Y Axis', range=[-1, 1]),
+                       zaxis=dict(title='Z Axis', range=[-1, 1])),
+                width=900, height=900)
         
         # Guardar html
         fig.write_html("images/final_state.html")

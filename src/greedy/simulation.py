@@ -36,14 +36,14 @@ class Simulation:
         self.state.burned_nodes.update(self.state.burning_nodes)
         self.state.set_burning_nodes(new_burning_nodes)
 
-    def is_completely_burned(self, burning_nodes, burned_nodes, protected_nodes):
+    def is_completely_burned(self):
         """
         Checa si ya no hay nodos por quemar
         """
-        for node in burning_nodes:
+        for node in self.state.burning_nodes:
             neighbors = self.tree.get_neighbors(node)
             for neighbor in neighbors:
-                if neighbor not in burned_nodes and neighbor not in burning_nodes and neighbor not in protected_nodes:
+                if neighbor not in self.state.burned_nodes and neighbor not in self.state.burning_nodes and neighbor not in self.state.protected_nodes:
                     return False
         return True
 

@@ -20,7 +20,7 @@ def execute_experiment():
     
     step = 0
 
-    while not simulation.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
+    while not simulation.is_completely_burned():
         step += 1
         simulation.select_node_to_protect()
         simulation.propagate()

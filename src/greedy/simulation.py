@@ -15,7 +15,7 @@ class Simulation:
             raise ValueError("The initial node does not exist in the tree.")
         
         # Add a random firefighter position
-        self.firefighter.add_random_initial_firefighter_position()
+        self.firefighter.add_random_initial_position()
 
     def propagate(self):
         new_burning_nodes = set()
@@ -96,7 +96,7 @@ class Simulation:
             distances[int(node)] = float(self.firefighter.get_distance_to_node(node))
         return distances
 
-    def select_node_to_protect(self):
+    def select_node_to_protect_and_move(self):
         """
         Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
         """
@@ -112,8 +112,9 @@ class Simulation:
                 self.state.protected_nodes.add(node_to_protect)
                 self.firefighter.move_to_node(node_pos, node_time)
             else:
-                self.firefighter.move_fraction(node_pos, node_time)
+                self.firefighter.move_fraction(node_pos)
                 
+            self.firefighter.print_info()
             return True
 
         else:
@@ -127,11 +128,8 @@ class Simulation:
         exist_candidate = True
 
         while(self.firefighter.get_remaining_time() > 0 and exist_candidate):
-            exist_candidate = self.select_node_to_protect()
-            print('-' * 50)
-            print('Firefighter info: ')
-            print(f'Position: {self.firefighter.position} | Remaining time: {self.firefighter.get_remaining_time()}')
-            print('-' * 50)
+            exist_candidate = self.select_node_to_protect_and_move()
+            
 
     def execute_step(self):
         """

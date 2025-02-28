@@ -7,8 +7,9 @@ class Firefighter:
         self.position = None
         self.tree = tree
         self.__remaining_time__ = None
+        self.protecting_node = None
 
-    def add_random_initial_firefighter_position(self):
+    def add_random_initial_position(self):
         '''
         Add a random firefighter position in tridimensional space with scale 1.
         '''
@@ -33,7 +34,7 @@ class Firefighter:
     def decrease_remaining_time(self, time_to_decrease):
         self.__remaining_time__ -= time_to_decrease
 
-    def calc_new_pos(self, node_position, node_time):
+    def calc_new_pos(self, node_position):
         distance_between = np.linalg.norm(node_position - self.position)
         distance_can_move = self.speed * self.get_remaining_time()
 
@@ -48,7 +49,13 @@ class Firefighter:
         self.position = node_position
         self.decrease_remaining_time(node_time)
 
-    def move_fraction(self, node_position, node_time):
-        new_pos = self.calc_new_pos(node_position, node_time)
+    def move_fraction(self, node_position):
+        new_pos = self.calc_new_pos(node_position)
         self.position = new_pos
         self.decrease_remaining_time(self.get_remaining_time())
+
+    def print_info(self):
+        print('-' * 50)
+        print('Firefighter info: ')
+        print(f'Position: {self.position} | Remaining time: {self.get_remaining_time()}')
+        print('-' * 50)

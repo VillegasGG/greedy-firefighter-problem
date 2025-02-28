@@ -3,7 +3,7 @@ from firefighter import Firefighter
 from fire_state import FireState
 
 import numpy as np
-class FirePropagation:
+class Simulation:
     def __init__(self, tree):
         self.tree = tree
         self.state = FireState(tree)

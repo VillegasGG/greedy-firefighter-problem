@@ -5,7 +5,7 @@ import time
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from visualizer import TreeVisualizer
-from greedy.fire_simulation import FirePropagation
+from greedy.simulation import Simulation
 from config_tree import my_tree, root
 
 def run_fire_simulation(fire, visualizer):
@@ -27,7 +27,7 @@ def run_fire_simulation(fire, visualizer):
     print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
 
 def simulate_fire(tree, visualizer, root):
-    simulation = FirePropagation(tree)
+    simulation = Simulation(tree)
     simulation.start_fire(root)
     burned_nodes = simulation.state.burned_nodes
     burning_nodes = simulation.state.burning_nodes

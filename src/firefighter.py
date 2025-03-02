@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 class Firefighter:
-    def __init__(self, tree, speed = .6):
+    def __init__(self, tree, speed = .5):
         self.speed = speed
         self.position = None
         self.tree = tree
@@ -58,4 +58,5 @@ class Firefighter:
         print('-' * 50)
         print('Firefighter info: ')
         print(f'Position: {self.position} | Remaining time: {self.get_remaining_time()}')
+        print(f'Protecting node: {self.protecting_node}')
         print('-' * 50)

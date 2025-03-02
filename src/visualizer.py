@@ -76,7 +76,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burning_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burning_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=5, color='black'),
             name='Burning Nodes'
         ))
 
@@ -86,7 +86,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burned_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burned_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=5, color='black'),
             name='Burned Nodes'
         ))
 
@@ -97,7 +97,7 @@ class TreeVisualizer:
                 y=[self.tree.nodes_positions[node, 1] for node in protected_nodes],
                 z=[self.tree.nodes_positions[node, 2] for node in protected_nodes],
                 mode='markers',
-                marker=dict(size=10, color='yellow'),
+                marker=dict(size=5, color='yellow'),
                 name='Protected Nodes'
             ))
 
@@ -113,7 +113,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in unaffected_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in unaffected_nodes],
             mode='markers',
-            marker=dict(size=10, color='blue'),
+            marker=dict(size=5, color='blue'),
             name='Unaffected Nodes'
         ))
 
@@ -136,7 +136,7 @@ class TreeVisualizer:
             y=[firefighter_position[1]],
             z=[firefighter_position[2]],
             mode='markers',
-            marker=dict(size=10, color='green'),
+            marker=dict(size=5, color='green'),
             name='Firefighter'
         ))
 

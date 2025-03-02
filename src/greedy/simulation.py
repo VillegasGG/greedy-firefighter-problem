@@ -64,7 +64,7 @@ class Simulation:
         fire_distances = self.greedy.steps_to_reach_all()
         speed = self.firefighter.speed
       
-        print("Unnafected nodes:", len(unnafected_nodes))
+        print("Len unnafected nodes:", len(unnafected_nodes))
 
         for element in unnafected_nodes:
             is_protected = self.is_protected_by_ancestor(element)
@@ -74,7 +74,7 @@ class Simulation:
         time_to_reach = {} # Time taken to reach each candidate
         for candidate in candidates:
             time_to_reach[candidate] = firefighter_distances[candidate] / speed
-        
+
         # Show data:
         for candidate in candidates:
             print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]} | Time to burn: {fire_distances[candidate]}')
@@ -83,8 +83,12 @@ class Simulation:
         for candidate in candidates:
             if time_to_reach[candidate] < fire_distances[candidate]:
                 final_candidates.add((candidate, time_to_reach[candidate]))
+            
+        # Show data:
+        for candidate in final_candidates:
+            print(f'Node: {candidate[0]} | Time to reach: {candidate[1]}')
         
-        print("Candidates:", len(final_candidates))
+        print("Len candidates:", len(final_candidates))
         return final_candidates
 
     def get_distances_from_firefighter(self, nodes):
@@ -105,15 +109,17 @@ class Simulation:
         self.greedy.burned_nodes = burned_and_burning_nodes
         candidates = self.get_candidates()
         node_to_protect, node_time = self.greedy.get_node_to_protect(candidates, self.firefighter)
-        print(node_to_protect, node_time)
+        print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')
         
         if node_to_protect:
             node_pos = self.tree.nodes_positions[node_to_protect]
             if(self.firefighter.get_remaining_time() >= node_time):
                 self.state.protected_nodes.add(node_to_protect)
                 self.firefighter.move_to_node(node_pos, node_time)
+                self.firefighter.protecting_node = None
             else:
                 self.firefighter.move_fraction(node_pos)
+                self.firefighter.protecting_node = node_to_protect
                 
             self.firefighter.print_info()
             return True

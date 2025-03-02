@@ -61,7 +61,7 @@ class Simulation:
         unnafected_nodes = set_nodes - self.state.burned_nodes - self.state.protected_nodes - self.state.burning_nodes
 
         firefighter_distances = self.get_distances_from_firefighter(unnafected_nodes)
-        fire_distances = self.greedy.steps_to_reach_all()
+        fire_time = self.greedy.steps_to_reach_all()
         speed = self.firefighter.speed
       
         print("Len unnafected nodes:", len(unnafected_nodes))
@@ -77,11 +77,11 @@ class Simulation:
 
         # Show data:
         for candidate in candidates:
-            print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]} | Time to burn: {fire_distances[candidate]}')
+            print(f'Node: {candidate} | Time to reach: {time_to_reach[candidate]} | Time to burn: {fire_time[candidate]}')
 
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
-            if time_to_reach[candidate] < fire_distances[candidate]:
+            if time_to_reach[candidate] < fire_time[candidate]:
                 final_candidates.add((candidate, time_to_reach[candidate]))
             
         # Show data:

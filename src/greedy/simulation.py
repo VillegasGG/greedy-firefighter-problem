@@ -62,7 +62,6 @@ class Simulation:
         print('-' * 50)
 
     def show_candidates_tuple(self, message, candidates, fire_time):
-        print('-' * 50)
         print(message)
         print(f'Len candidates: {len(candidates)}')
         for candidate in candidates:
@@ -81,20 +80,9 @@ class Simulation:
 
         return candidates
 
-    def get_candidates(self):
-        candidates = set()
+    def get_final_candidates(self, candidates, fire_time, time_ff_reach):
+
         final_candidates = set()
-
-        candidates = self.get_not_protected_nodes()
-
-        ff_distances = self.get_distances_from_firefighter(candidates)
-        fire_time = self.greedy.steps_to_reach_all()
-
-        time_ff_reach = {} # Time taken to reach each candidate
-        for candidate in candidates:
-            time_ff_reach[candidate] = ff_distances[candidate] / self.firefighter.speed
-      
-        self.show_candidates("Candidates after first filter (After protected by ancestor):", candidates, fire_time, time_ff_reach)
 
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
@@ -113,19 +101,26 @@ class Simulation:
             else:
                 if time_ff_reach[candidate] < time_to_burn_candidate:
                     final_candidates.add((candidate, time_ff_reach[candidate]))
-            
-        self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)
 
         return final_candidates
 
-    def get_distances_from_firefighter(self, nodes):
-        """
-        Obtiene la distancia de todos los nodos al bombero
-        """
-        distances = {}
-        for node in nodes:
-            distances[int(node)] = float(self.firefighter.get_distance_to_node(node))
-        return distances
+    def get_candidates(self):
+        
+        first_candidates = self.get_not_protected_nodes()
+
+        ff_distances = self.firefighter.get_distances_to_nodes(first_candidates)
+        fire_time = self.greedy.steps_to_reach_all()
+
+        time_ff_reach = {} # Time taken to reach each candidate
+        for candidate in first_candidates:
+            time_ff_reach[candidate] = ff_distances[candidate] / self.firefighter.speed
+      
+        self.show_candidates("Candidates after first filter (After protected by ancestor):", first_candidates, fire_time, time_ff_reach)
+
+        final_candidates = self.get_final_candidates(first_candidates, fire_time, time_ff_reach)
+        self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)
+
+        return final_candidates
 
     def select_node_to_protect_and_move(self):
         """

@@ -1,12 +1,14 @@
 import sys
 import os
 import time
+import json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from visualizer import TreeVisualizer
 from greedy.simulation import Simulation
 from config_tree import my_tree, root
+from helpers import save_results
 
 visualizer = TreeVisualizer(my_tree)
 
@@ -18,7 +20,6 @@ def vizualize_state(simulation, step):
    
 def execute_experiment():
     step = -1
-    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     simulation = Simulation(my_tree)
     
     while not simulation.is_completely_burned():
@@ -30,9 +31,14 @@ def execute_experiment():
     print('#' * 50)
 
     visualizer.plot_3d_final_state(simulation.state.burning_nodes, simulation.state.burned_nodes, simulation.state.protected_nodes, simulation.firefighter.position)
+    save_results(simulation.state.burned_nodes, simulation.state.burning_nodes, simulation.state.protected_nodes, "result.json")
     print('-' * 50 + f"\nDaño: {len(simulation.state.burned_nodes) + len(simulation.state.burning_nodes)}\n" + '-' * 50)
 
 def main():
+    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
+    my_tree.save_positions_to_json("data/positions.json")
+    my_tree.save_edges_to_json("data/edges.json")
+
     start_time = time.perf_counter()
     execute_experiment()
     end_time = time.perf_counter()

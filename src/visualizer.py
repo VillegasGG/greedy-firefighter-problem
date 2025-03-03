@@ -1,5 +1,4 @@
 import plotly.graph_objects as go
-import pygraphviz as pgv
 
 class TreeVisualizer:
     def __init__(self, tree):
@@ -55,49 +54,15 @@ class TreeVisualizer:
         #     ))
 
         fig.update_layout(title='3D Tree Structure',
-                        scene=dict(
-                            xaxis_title='X Axis',
-                            yaxis_title='Y Axis',
-                            zaxis_title='Z Axis'
-                        ),
-                        width=700,
-                        height=700)
+                scene=dict(
+                    xaxis=dict(title='X Axis', range=[-1, 1]),
+                    yaxis=dict(title='Y Axis', range=[-1, 1]),
+                    zaxis=dict(title='Z Axis', range=[-1, 1])
+                ),
+                width=700,
+                height=700)
 
         fig.write_html(img_name + ".html")
-    
-    def tree_order(self, tree, root):
-        """
-        Recorre el grafo desde la raiz para su correcta visualizacion
-        """
-        G = pgv.AGraph()
-        adj_matrix = tree.edges
-
-        G.add_node(root)
-        stack = [root]
-        visitados = set() 
-
-        while stack:
-            actual = stack.pop() 
-            if actual not in visitados:
-                visitados.add(actual) 
-
-                for posicion in range(len(adj_matrix[actual])):
-                    if adj_matrix[actual][posicion] == 1: 
-                        G.add_node(posicion)
-                        G.add_edge(actual, posicion) 
-                        
-                        if posicion not in visitados:
-                            stack.append(posicion) 
-        return G
-
-    def plot_2d_tree_with_root(self, tree, root):
-        """
-        Gráfica del árbol en 2D 
-        """
-        G = self.tree_order(tree, root)
-        G.write("pygrapghviz.dot")
-        G.layout(prog="dot")
-        G.draw("images/grafo_2d_arbol.png")
 
     def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes, firefighter_position):
         """
@@ -111,7 +76,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burning_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burning_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=5, color='black'),
             name='Burning Nodes'
         ))
 
@@ -121,7 +86,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in burned_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in burned_nodes],
             mode='markers',
-            marker=dict(size=10, color='black'),
+            marker=dict(size=5, color='black'),
             name='Burned Nodes'
         ))
 
@@ -132,7 +97,7 @@ class TreeVisualizer:
                 y=[self.tree.nodes_positions[node, 1] for node in protected_nodes],
                 z=[self.tree.nodes_positions[node, 2] for node in protected_nodes],
                 mode='markers',
-                marker=dict(size=10, color='yellow'),
+                marker=dict(size=5, color='yellow'),
                 name='Protected Nodes'
             ))
 
@@ -148,7 +113,7 @@ class TreeVisualizer:
             y=[self.tree.nodes_positions[node, 1] for node in unaffected_nodes],
             z=[self.tree.nodes_positions[node, 2] for node in unaffected_nodes],
             mode='markers',
-            marker=dict(size=10, color='blue'),
+            marker=dict(size=5, color='blue'),
             name='Unaffected Nodes'
         ))
 
@@ -171,18 +136,20 @@ class TreeVisualizer:
             y=[firefighter_position[1]],
             z=[firefighter_position[2]],
             mode='markers',
-            marker=dict(size=10, color='green'),
+            marker=dict(size=5, color='green'),
             name='Firefighter'
         ))
 
         # Configuracion
         fig.update_layout(title=f'Step {step}: Fire Propagation',
-                        scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
+                        scene=dict(xaxis=dict(title='X Axis', range=[-1, 1]),
+                                   yaxis=dict(title='Y Axis', range=[-1, 1]),
+                                   zaxis=dict(title='Z Axis', range=[-1, 1])),
                         width=700, height=700)
 
         # Guardar la imagen
-        fig.write_image(f"images/steps/step_{step}.png")
-    
+        fig.write_image(f"images/states/state_{step}.png")
+
     def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.
@@ -261,8 +228,10 @@ class TreeVisualizer:
 
         # Configuracion
         fig.update_layout(title='Final State: Fire Propagation',
-                        scene=dict(xaxis_title='X Axis', yaxis_title='Y Axis', zaxis_title='Z Axis'),
-                        width=900, height=900)
+                scene=dict(xaxis=dict(title='X Axis', range=[-1, 1]),
+                       yaxis=dict(title='Y Axis', range=[-1, 1]),
+                       zaxis=dict(title='Z Axis', range=[-1, 1])),
+                width=900, height=900)
         
         # Guardar html
         fig.write_html("images/final_state.html")

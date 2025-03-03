@@ -30,8 +30,6 @@ class GreedyStep():
         candidates_depths = {}
         candidates_time = {}
 
-        print('Candidates: ' + str(candidates))
-
         for candidate in candidates:
             subtree = self.get_candidate_subtree(candidate[0])
             depth = len(subtree)
@@ -43,6 +41,7 @@ class GreedyStep():
             return None, None
         
         max_depth = max(candidates_depths.values())
+        
         node_to_protect =  [node for node, depth in candidates_depths.items() if depth == max_depth][0]
         print('Node protected: ' + str(int(node_to_protect)) + ' Safe: ' + str(max_depth) + ' nodes')
 

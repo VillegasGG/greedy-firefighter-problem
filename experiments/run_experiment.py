@@ -12,43 +12,28 @@ from helpers import save_results
 
 visualizer = TreeVisualizer(my_tree)
 
-def run_fire_simulation(simulation):
-    step = 0
+def vizualize_state(simulation, step):
     burning_nodes = simulation.state.burning_nodes
     burned_nodes = simulation.state.burned_nodes
     protected_nodes = simulation.state.protected_nodes
-    while not simulation.is_completely_burned(burning_nodes, burned_nodes, protected_nodes):
-        step += 1
-        simulation.greedy_step()
-        simulation.propagate()
-        print(f"Paso {step}")
-        burning_nodes = simulation.state.burning_nodes
-        burned_nodes = simulation.state.burned_nodes
-        protected_nodes = simulation.state.protected_nodes
-
-        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.firefighter.position)
-
-    save_results(burned_nodes, burning_nodes, protected_nodes, "results.json")
-    visualizer.plot_3d_final_state(burning_nodes, burned_nodes, protected_nodes, simulation.firefighter.position)
-    print('-' * 50 + f"\nDaño: {len(burned_nodes) + len(burning_nodes)}\n" + '-' * 50)
-
-def simulate_fire(tree):
-    simulation = Simulation(tree)
-    simulation.start_fire(root)
-    burned_nodes = simulation.state.burned_nodes
-    burning_nodes = simulation.state.burning_nodes
-    protected_nodes = simulation.state.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, 0, protected_nodes, simulation.firefighter.position)
-    run_fire_simulation(simulation)
-
-def execute_experiment():
-    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
-    visualizer.plot_2d_tree_with_root(my_tree, root)
-    my_tree.save_positions_to_json("positions.txt")
-    my_tree.save_edges_to_json("edges.txt")
-    print("Root:", root)
-    simulate_fire(my_tree)
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.firefighter.position)
    
+def execute_experiment():
+    step = -1
+    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
+    simulation = Simulation(my_tree)
+    
+    while not simulation.is_completely_burned():
+        step += 1
+        if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
+        simulation.execute_step()
+        vizualize_state(simulation, step)
+        
+    print('#' * 50)
+
+    visualizer.plot_3d_final_state(simulation.state.burning_nodes, simulation.state.burned_nodes, simulation.state.protected_nodes, simulation.firefighter.position)
+    print('-' * 50 + f"\nDaño: {len(simulation.state.burned_nodes) + len(simulation.state.burning_nodes)}\n" + '-' * 50)
+
 def main():
     start_time = time.perf_counter()
     execute_experiment()
@@ -57,3 +42,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# Checar como paralelizar rollout con cuda o hilos

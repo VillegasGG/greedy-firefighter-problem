@@ -1,6 +1,5 @@
 import json
 
-
 def save_results(burned_nodes, burning_nodes, protected_nodes, filename):
     results = {
         "burned_nodes": [int(node) for node in burned_nodes],

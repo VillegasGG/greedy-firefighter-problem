@@ -32,6 +32,7 @@ def execute_experiment():
     print('#' * 50)
 
     visualizer.plot_3d_final_state(simulation.state.burning_nodes, simulation.state.burned_nodes, simulation.state.protected_nodes, simulation.firefighter.position)
+    save_results(simulation.state.burned_nodes, simulation.state.burning_nodes, simulation.state.protected_nodes, "result.json")
     print('-' * 50 + f"\nDaño: {len(simulation.state.burned_nodes) + len(simulation.state.burning_nodes)}\n" + '-' * 50)
 
 def main():

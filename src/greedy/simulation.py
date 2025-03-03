@@ -61,26 +61,40 @@ class Simulation:
             print(f'Node: {candidate} | Fire time: {fire_time[candidate]} | Time to reach: {time_ff_reach[candidate] if time_ff_reach else "Not calculated"}')
         print('-' * 50)
 
-    def get_candidates(self):
-        candidates = set()
-        final_candidates = set()
-        unnafected_nodes = set(self.tree.nodes) - self.state.burned_nodes - self.state.protected_nodes - self.state.burning_nodes
+    def show_candidates_tuple(self, message, candidates, fire_time):
+        print('-' * 50)
+        print(message)
+        print(f'Len candidates: {len(candidates)}')
+        for candidate in candidates:
+            print(f'Node: {candidate[0]} | Time to reach: {candidate[1]} | Fire time: {fire_time[candidate[0]]}')
+        print('-' * 50)
 
-        ff_distances = self.get_distances_from_firefighter(unnafected_nodes)
-        fire_time = self.greedy.steps_to_reach_all()
-      
-        self.show_candidates("Candidates before first filter (After get unnafected_nodes):", unnafected_nodes, fire_time)
+    def get_not_protected_nodes(self):
+        candidates = set()
+
+        unnafected_nodes = set(self.tree.nodes) - self.state.burned_nodes - self.state.protected_nodes - self.state.burning_nodes
 
         for element in unnafected_nodes:
             is_protected = self.is_protected_by_ancestor(element)
             if not is_protected:
                 candidates.add(element)
 
-        self.show_candidates("Candidates after first filter (After protected by ancestor):", candidates, fire_time)
+        return candidates
+
+    def get_candidates(self):
+        candidates = set()
+        final_candidates = set()
+
+        candidates = self.get_not_protected_nodes()
+
+        ff_distances = self.get_distances_from_firefighter(candidates)
+        fire_time = self.greedy.steps_to_reach_all()
 
         time_ff_reach = {} # Time taken to reach each candidate
         for candidate in candidates:
             time_ff_reach[candidate] = ff_distances[candidate] / self.firefighter.speed
+      
+        self.show_candidates("Candidates after first filter (After protected by ancestor):", candidates, fire_time, time_ff_reach)
 
         # Filter candidates that can be reached before the fire
         for candidate in candidates:
@@ -100,9 +114,7 @@ class Simulation:
                 if time_ff_reach[candidate] < time_to_burn_candidate:
                     final_candidates.add((candidate, time_ff_reach[candidate]))
             
-        print(f'Final candidates:')
-        print(f'{len(final_candidates)} candidates')
-        print(set((node[0], node[1]) for node in final_candidates))
+        self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)
 
         return final_candidates
 

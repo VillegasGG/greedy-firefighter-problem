@@ -47,14 +47,15 @@ class GreedyStep():
 
         if(firefighter.protecting_node):
             if(firefighter.protecting_node != node_to_protect):
-                print('!'*50)
-                print(f'FF is moving to node {node_to_protect} but better option is {firefighter.protecting_node}')
-                print(candidates_depths)
-                print(f'Actual protecting node: {firefighter.protecting_node} has {candidates_depths[firefighter.protecting_node]} nodes')
-                print(f'New protecting node: {node_to_protect} has {candidates_depths[node_to_protect]} nodes')
-                print(f'Actual protecting node time: {candidates_time[firefighter.protecting_node]}')
-                print(f'New protecting node time: {candidates_time[node_to_protect]}')
-                print('!'*50)
+                if candidates_depths[firefighter.protecting_node] < candidates_depths[node_to_protect]:
+                    print('!'*50)
+                    print(f'FF is moving to node {node_to_protect} but better option is {firefighter.protecting_node}')
+                    print(candidates_depths)
+                    print(f'Actual protecting node: {firefighter.protecting_node} has {candidates_depths[firefighter.protecting_node]} nodes')
+                    print(f'New protecting node: {node_to_protect} has {candidates_depths[node_to_protect]} nodes')
+                    print(f'Actual protecting node time: {candidates_time[firefighter.protecting_node]}')
+                    print(f'New protecting node time: {candidates_time[node_to_protect]}')
+                    print('!'*50)
             return firefighter.protecting_node, candidates_time[firefighter.protecting_node]
 
         return node_to_protect, candidates_time[node_to_protect]

@@ -97,7 +97,8 @@ class Simulation:
                 if next_step_ff < next_step_burn:
                     final_candidates.add((candidate, time_ff_reach[candidate]))
                 else:
-                    print(f'IMPORTANT!!  -- Node: {candidate} | Time to reach: {time_ff_reach[candidate]} | Time to burn: {fire_time[candidate]} but remaining time is {remaining_time}')
+                    # print(f'IMPORTANT!!  -- Node: {candidate} | Time to reach: {time_ff_reach[candidate]} | Time to burn: {fire_time[candidate]} but remaining time is {remaining_time}')
+                    continue
             else:
                 if time_ff_reach[candidate] < time_to_burn_candidate:
                     final_candidates.add((candidate, time_ff_reach[candidate]))
@@ -105,7 +106,7 @@ class Simulation:
         return final_candidates
 
     def get_candidates(self):
-        
+
         first_candidates = self.get_not_protected_nodes()
 
         ff_distances = self.firefighter.get_distances_to_nodes(first_candidates)
@@ -115,10 +116,11 @@ class Simulation:
         for candidate in first_candidates:
             time_ff_reach[candidate] = ff_distances[candidate] / self.firefighter.speed
       
-        self.show_candidates("Candidates after first filter (After protected by ancestor):", first_candidates, fire_time, time_ff_reach)
+        # self.show_candidates("Candidates after first filter (After protected by ancestor):", first_candidates, fire_time, time_ff_reach)
 
         final_candidates = self.get_final_candidates(first_candidates, fire_time, time_ff_reach)
-        self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)
+        
+        # self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)
 
         return final_candidates
 

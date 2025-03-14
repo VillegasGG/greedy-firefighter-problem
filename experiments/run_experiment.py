@@ -1,7 +1,6 @@
 import sys
 import os
 import time
-import json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 

@@ -8,29 +8,6 @@ class Simulation:
         self.env = Environment(tree)
         self.greedy = GreedyStep(tree)
 
-    def start_fire(self, initial_node):
-        if initial_node in self.env.tree.nodes:
-            self.env.state.burning_nodes.add(initial_node)
-        else:
-            raise ValueError("The initial node does not exist in the tree.")
-        
-        # Add a random firefighter position
-        self.env.firefighter.add_random_initial_position()
-
-    def propagate(self):
-        new_burning_nodes = set()
-        
-        for node in self.env.state.burning_nodes:
-            neighbors = self.env.tree.get_neighbors(node)  # Method in the Tree class to get neighboring nodes
-            for neighbor in neighbors:
-                if neighbor not in self.env.state.burned_nodes and neighbor not in self.env.state.burning_nodes:
-                    if neighbor not in self.env.state.protected_nodes:    # If node is not defended, it will burn
-                        new_burning_nodes.add(neighbor)
-        
-        # Update the state of the nodes
-        self.env.state.burned_nodes.update(self.env.state.burning_nodes)
-        self.env.state.set_burning_nodes(new_burning_nodes)
-
     def is_completely_burned(self):
         """
         Checa si ya no hay nodos por quemar
@@ -173,7 +150,7 @@ class Simulation:
         self.env.firefighter.init_remaining_time()
 
         if not self.env.state.burning_nodes:
-            self.start_fire(self.env.tree.root)
+            self.env.start_fire(self.env.tree.root)
         else:
             self.firefighter_action()
-            self.propagate()
+            self.env.propagate()

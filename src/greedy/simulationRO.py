@@ -1,6 +1,7 @@
 from greedy.greedy_step import GreedyStep
 from firefighter import Firefighter
 from fire_state import FireState
+import copy
 
 class SimulationRO:
     def __init__(self, tree):
@@ -8,6 +9,12 @@ class SimulationRO:
         self.state = FireState(tree)
         self.firefighter = Firefighter(tree)
         self.greedy = GreedyStep(tree)
+
+    def copy(self):
+        """
+        Copia el estado actual de la simulacion
+        """
+        return copy.deepcopy(self) 
     
     def start_fire(self, initial_node):
         if initial_node in self.tree.nodes:
@@ -131,6 +138,7 @@ class SimulationRO:
         """
         burned_and_burning_nodes = self.state.burned_nodes.union(self.state.burning_nodes)
         self.greedy.burned_nodes = burned_and_burning_nodes
+        self.rollout()
         candidates = self.get_candidates()
         node_to_protect, node_time = self.greedy.get_node_to_protect(candidates, self.firefighter)
         print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')
@@ -178,4 +186,29 @@ class SimulationRO:
         else:
             self.firefighter_action()
             self.propagate()
+
+
+    def rollout(self):
+        '''
+        Simula que el bombero protege a cada uno de los candidatos
+        '''
+        candidates = self.get_candidates()
+        num_candidates = len(candidates)
+        print(f'Rollout with {num_candidates} candidates')
+        print(candidates)
+
+        ### Make num_candidates copies of the current state
+        for candidate in candidates:
+            candidate_state = copy.deepcopy(self.state)
+            candidate_ff = copy.deepcopy(self.firefighter)
+            candidate_greedy = copy.deepcopy(self.greedy)
+            candidate_state.protected_nodes.add(candidate)
+
+            # Debugging: Display the state after adding the candidate
+            print(f'Rollout state for candidate {candidate}:')
+            print(f'Protected nodes: {candidate_state.protected_nodes}')
+            print(f'Burning nodes: {candidate_state.burning_nodes}')
+            print(f'Burned nodes: {candidate_state.burned_nodes}')
+
+
 

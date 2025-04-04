@@ -12,10 +12,10 @@ from helpers import save_results
 visualizer = TreeVisualizer(my_tree)
 
 def vizualize_state(simulation, step):
-    burning_nodes = simulation.state.burning_nodes
-    burned_nodes = simulation.state.burned_nodes
-    protected_nodes = simulation.state.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.firefighter.position)
+    burning_nodes = simulation.env.state.burning_nodes
+    burned_nodes = simulation.env.state.burned_nodes
+    protected_nodes = simulation.env.state.protected_nodes
+    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.env.firefighter.position)
    
 def execute_experiment():
     step = -1
@@ -33,10 +33,10 @@ def execute_experiment():
         
     print('#' * 50)
 
-    visualizer.plot_3d_final_state(simulation.state.burning_nodes, simulation.state.burned_nodes, simulation.state.protected_nodes, simulation.firefighter.position)
-    save_results(simulation.state.burned_nodes, simulation.state.burning_nodes, simulation.state.protected_nodes, "result.json")
+    visualizer.plot_3d_final_state(simulation.env.state.burning_nodes, simulation.env.state.burned_nodes, simulation.env.state.protected_nodes, simulation.env.firefighter.position)
+    save_results(simulation.env.state.burned_nodes, simulation.env.state.burning_nodes, simulation.env.state.protected_nodes, "result.json")
     
-    print('-' * 50 + f"\nDaño: {len(simulation.state.burned_nodes) + len(simulation.state.burning_nodes)}\n" + '-' * 50)
+    print('-' * 50 + f"\nDaño: {len(simulation.env.state.burned_nodes) + len(simulation.env.state.burning_nodes)}\n" + '-' * 50)
 
     print(f"Tiempo de ejecución total: {end_time - start_time:.4f} segundos")
 

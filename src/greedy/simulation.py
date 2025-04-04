@@ -8,20 +8,6 @@ class Simulation:
         self.env = Environment(tree)
         self.greedy = GreedyStep(tree)
 
-    def is_completely_burned(self):
-        """
-        Checa si ya no hay nodos por quemar
-        """
-        if not self.env.state.burning_nodes and not self.env.state.burned_nodes:
-            return False
-
-        for node in self.env.state.burning_nodes:
-            neighbors = self.env.tree.get_neighbors(node)
-            for neighbor in neighbors:
-                if neighbor not in self.env.state.burned_nodes and neighbor not in self.env.state.burning_nodes and neighbor not in self.env.state.protected_nodes:
-                    return False
-        return True
-
     def is_protected_by_ancestor(self, node):
         path = self.env.tree.get_path_to_root(node)
         for ancestor in path:

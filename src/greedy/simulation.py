@@ -6,21 +6,6 @@ class Simulation:
         self.env = Environment(tree)
         self.greedy = GreedyStep(tree)
 
-    def show_candidates(self, message, candidates, fire_time, time_ff_reach=None):
-        print('-' * 50)
-        print(message)
-        print(f'Len candidates: {len(candidates)}')
-        for candidate in candidates:
-            print(f'Node: {candidate} | Fire time: {fire_time[candidate]} | Time to reach: {time_ff_reach[candidate] if time_ff_reach else "Not calculated"}')
-        print('-' * 50)
-
-    def show_candidates_tuple(self, message, candidates, fire_time):
-        print(message)
-        print(f'Len candidates: {len(candidates)}')
-        for candidate in candidates:
-            print(f'Node: {candidate[0]} | Time to reach: {candidate[1]} | Fire time: {fire_time[candidate[0]]}')
-        print('-' * 50)
-
     def firefighter_action(self):
         """
         Turno del bombero

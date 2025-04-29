@@ -3,7 +3,7 @@ import sys
 import time
 
 
-from greedy.environment import Environment
+from policies.environment import Environment
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 

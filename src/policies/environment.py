@@ -1,4 +1,4 @@
-from greedy.greedy_step import GreedyStep
+from policies.greedy_step import GreedyStep
 from firefighter import Firefighter
 from fire_state import FireState
 import copy

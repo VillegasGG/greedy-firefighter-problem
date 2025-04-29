@@ -15,7 +15,7 @@ class Simulation:
         exist_candidate = True
 
         while(self.env.firefighter.get_remaining_time() > 0 and exist_candidate):
-            exist_candidate = self.policy.select_node_to_protect_and_move(self.env)
+            exist_candidate = self.policy.select_action(self.env)
             
     def execute_step(self):
         """

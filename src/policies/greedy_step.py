@@ -6,7 +6,6 @@ class GreedyStep():
         self.burned_nodes = set()
 
     def show_candidates(self, message, candidates, fire_time, time_ff_reach=None):
-        print('-' * 50)
         print(message)
         print(f'Len candidates: {len(candidates)}')
         for candidate in candidates:
@@ -164,7 +163,7 @@ class GreedyStep():
 
         return final_candidates
 
-    def select_node_to_protect_and_move(self, env):
+    def select_action(self, env):
         """
         - Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
         - Se mueve el bombero al nodo seleccionado

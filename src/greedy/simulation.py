@@ -2,7 +2,7 @@ import os
 import sys
 import time
 
-from greedy.greedy_step import GreedyStep
+
 from greedy.environment import Environment
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -11,9 +11,9 @@ from helpers import save_results
 from visualizer import TreeVisualizer
 
 class Simulation:
-    def __init__(self, tree):
+    def __init__(self, policy, tree):
         self.env = Environment(tree)
-        self.greedy = GreedyStep(tree)
+        self.policy = policy
 
     def firefighter_action(self):
         """
@@ -22,7 +22,7 @@ class Simulation:
         exist_candidate = True
 
         while(self.env.firefighter.get_remaining_time() > 0 and exist_candidate):
-            exist_candidate = self.greedy.select_node_to_protect_and_move(self.env)
+            exist_candidate = self.policy.select_node_to_protect_and_move(self.env)
             
     def execute_step(self):
         """

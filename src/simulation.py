@@ -1,14 +1,7 @@
-import os
-import sys
 import time
-
-
-from policies.environment import Environment
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
-
 from helpers import save_results
 from visualizer import TreeVisualizer
+from environment import Environment
 
 class Simulation:
     def __init__(self, policy, tree):

@@ -17,7 +17,7 @@ def vizualize_state(simulation, step):
     protected_nodes = simulation.env.state.protected_nodes
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.env.firefighter.position)
    
-def execute_experiment(graph=False):
+def run_simulation(graph=False):
     if graph:
         visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     step = -1
@@ -46,7 +46,7 @@ def execute_experiment(graph=False):
 def main():
     my_tree.save_positions_to_json("data/positions.json")
     my_tree.save_edges_to_json("data/edges.json")
-    execute_experiment(graph=True)
+    run_simulation(graph=True)
  
 
 

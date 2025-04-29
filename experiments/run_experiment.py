@@ -17,7 +17,9 @@ def vizualize_state(simulation, step):
     protected_nodes = simulation.env.state.protected_nodes
     visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.env.firefighter.position)
    
-def execute_experiment():
+def execute_experiment(graph=False):
+    if graph:
+        visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     step = -1
     simulation = Simulation(my_tree)
 
@@ -27,25 +29,24 @@ def execute_experiment():
         step += 1
         if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
         simulation.execute_step()
-        vizualize_state(simulation, step)
+        if graph:
+            vizualize_state(simulation, step)
     
     end_time = time.perf_counter()
         
     print('#' * 50)
 
-    visualizer.plot_3d_final_state(simulation.env.state.burning_nodes, simulation.env.state.burned_nodes, simulation.env.state.protected_nodes, simulation.env.firefighter.position)
+    if graph:
+        visualizer.plot_3d_final_state(simulation.env.state.burning_nodes, simulation.env.state.burned_nodes, simulation.env.state.protected_nodes, simulation.env.firefighter.position)
     save_results(simulation.env.state.burned_nodes, simulation.env.state.burning_nodes, simulation.env.state.protected_nodes, "result.json")
     
     print('-' * 50 + f"\nDaño: {len(simulation.env.state.burned_nodes) + len(simulation.env.state.burning_nodes)}\n" + '-' * 50)
-
     print(f"Tiempo de ejecución total: {end_time - start_time:.4f} segundos")
 
 def main():
-    visualizer.plot_3d_tree(my_tree, "images/initial_tree")
     my_tree.save_positions_to_json("data/positions.json")
     my_tree.save_edges_to_json("data/edges.json")
-
-    execute_experiment()
+    execute_experiment(graph=True)
  
 
 

@@ -1,55 +1,18 @@
 import sys
 import os
-import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from visualizer import TreeVisualizer
+
 from greedy.simulation import Simulation
 from config_tree import my_tree, root
-from helpers import save_results
-
-visualizer = TreeVisualizer(my_tree)
-
-def vizualize_state(simulation, step):
-    burning_nodes = simulation.env.state.burning_nodes
-    burned_nodes = simulation.env.state.burned_nodes
-    protected_nodes = simulation.env.state.protected_nodes
-    visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, simulation.env.firefighter.position)
-   
-def run_simulation(graph=False):
-    if graph:
-        visualizer.plot_3d_tree(my_tree, "images/initial_tree")
-    step = -1
-    simulation = Simulation(my_tree)
-
-    start_time = time.perf_counter()
-    
-    while not simulation.env.is_completely_burned():
-        step += 1
-        if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
-        simulation.execute_step()
-        if graph:
-            vizualize_state(simulation, step)
-    
-    end_time = time.perf_counter()
-        
-    print('#' * 50)
-
-    if graph:
-        visualizer.plot_3d_final_state(simulation.env.state.burning_nodes, simulation.env.state.burned_nodes, simulation.env.state.protected_nodes, simulation.env.firefighter.position)
-    save_results(simulation.env.state.burned_nodes, simulation.env.state.burning_nodes, simulation.env.state.protected_nodes, "result.json")
-    
-    print('-' * 50 + f"\nDaño: {len(simulation.env.state.burned_nodes) + len(simulation.env.state.burning_nodes)}\n" + '-' * 50)
-    print(f"Tiempo de ejecución total: {end_time - start_time:.4f} segundos")
 
 def main():
+    simulation = Simulation(my_tree)
     my_tree.save_positions_to_json("data/positions.json")
     my_tree.save_edges_to_json("data/edges.json")
-    run_simulation(graph=True)
+    simulation.run_simulation(graph=True)
  
-
-
 if __name__ == "__main__":
     main()
 

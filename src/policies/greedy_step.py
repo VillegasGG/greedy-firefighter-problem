@@ -67,8 +67,6 @@ class GreedyStep():
                     print(candidates_depths)
                     print(f'Actual protecting node: {firefighter.protecting_node} has {candidates_depths[firefighter.protecting_node]} nodes')
                     print(f'New protecting node: {node_to_protect} has {candidates_depths[node_to_protect]} nodes')
-                    print(f'Actual protecting node time: {candidates_time[firefighter.protecting_node]}')
-                    print(f'New protecting node time: {candidates_time[node_to_protect]}')
                     print('!'*50)
             return firefighter.protecting_node, candidates_time[firefighter.protecting_node]
 
@@ -117,7 +115,6 @@ class GreedyStep():
                 if next_step_ff < next_step_burn:
                     final_candidates.add((candidate, time_ff_reach[candidate]))
                 else:
-                    # print(f'IMPORTANT!!  -- Node: {candidate} | Time to reach: {time_ff_reach[candidate]} | Time to burn: {fire_time[candidate]} but remaining time is {remaining_time}')
                     continue
             else:
                 if time_ff_reach[candidate] < time_to_burn_candidate:
@@ -145,6 +142,8 @@ class GreedyStep():
         return candidates
 
     def get_candidates(self, env):
+        burned_and_burning_nodes = env.state.burned_nodes.union(env.state.burning_nodes)
+        self.burned_nodes = burned_and_burning_nodes
 
         first_candidates = self.get_not_protected_nodes(env)
 
@@ -167,9 +166,10 @@ class GreedyStep():
         """
         - Seleccion de un nodo a proteger: se selecciona el nodo con el subarbol mas grande (aunque este mas lejos)
         - Se mueve el bombero al nodo seleccionado
+
+        Returns False if no node to protect is found, True otherwise
         """
-        burned_and_burning_nodes = env.state.burned_nodes.union(env.state.burning_nodes)
-        self.burned_nodes = burned_and_burning_nodes
+        
         candidates = self.get_candidates(env)
         node_to_protect, node_time = self.get_node_to_protect(candidates, env.firefighter)
         print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')

@@ -42,7 +42,6 @@ class Simulation:
         visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, self.env.firefighter.position)
     
     def run_simulation(self, graph=False):
-       
         if graph:
             visualizer = TreeVisualizer(self.env.tree)
             visualizer.plot_3d_tree(self.env.tree, "images/initial_tree")

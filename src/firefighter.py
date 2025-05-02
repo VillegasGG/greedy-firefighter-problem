@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 class Firefighter:
-    def __init__(self, tree, speed = .5):
+    def __init__(self, tree, speed = .9):
         self.speed = speed
         self.position = None
         self.tree = tree

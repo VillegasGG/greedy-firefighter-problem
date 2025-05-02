@@ -15,9 +15,9 @@ class GreedyStep():
     def show_candidates_tuple(self, message, candidates, fire_time):
         print(message)
         print(f'Len candidates: {len(candidates)}')
-        for candidate in candidates:
-            print(f'Node: {candidate[0]} | Time to reach: {candidate[1]} | Fire time: {fire_time[candidate[0]]}')
-        print('-' * 50)
+        # for candidate in candidates:
+        #     print(f'Node: {candidate[0]} | Time to reach: {candidate[1]} | Fire time: {fire_time[candidate[0]]}')
+        # print('-' * 50)
 
     def get_candidate_subtree(self, node): 
         queue = []
@@ -154,8 +154,6 @@ class GreedyStep():
         for candidate in first_candidates:
             time_ff_reach[candidate] = ff_distances[candidate] / env.firefighter.speed
       
-        self.show_candidates("Candidates after first filter (After protected by ancestor):", first_candidates, fire_time, time_ff_reach)
-
         final_candidates = self.get_final_candidates(first_candidates, fire_time, time_ff_reach, env)
         
         self.show_candidates_tuple("Final candidates:", final_candidates, fire_time)

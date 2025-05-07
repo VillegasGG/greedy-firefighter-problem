@@ -2,6 +2,7 @@ import time
 from helpers import save_results
 from visualizer import TreeVisualizer
 from environment import Environment
+from helpers import vizualize_state
 
 class Simulation:
     def __init__(self, policy, tree):
@@ -34,12 +35,6 @@ class Simulation:
         else:
             self.firefighter_action()
             self.env.propagate()
-
-    def vizualize_state(self, visualizer, step):
-        burning_nodes = self.env.state.burning_nodes
-        burned_nodes = self.env.state.burned_nodes
-        protected_nodes = self.env.state.protected_nodes
-        visualizer.plot_fire_state(burning_nodes, burned_nodes, step, protected_nodes, self.env.firefighter.position)
     
     def run_simulation(self, graph=False):
         if graph:
@@ -54,7 +49,7 @@ class Simulation:
             if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
             self.execute_step()
             if graph:
-                self.vizualize_state(visualizer, step)
+                vizualize_state(visualizer, self.env, step)
         
         end_time = time.perf_counter()
             

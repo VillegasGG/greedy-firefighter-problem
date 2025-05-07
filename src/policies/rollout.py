@@ -12,6 +12,9 @@ class Rollout:
         # Initialize min burned nodes to a infinity value
         min_burned_nodes = float('inf')
         best_candidate = None
+        num_final_candidates = 0
+        min_time = float('inf')
+        best_by_time = None
 
         if(not candidates):
             print('No candidates to protect')
@@ -57,8 +60,14 @@ class Rollout:
 
             # Check if the number of burned nodes is less than the current minimum
             if total_burning_nodes < min_burned_nodes:
+                num_final_candidates += 1
                 min_burned_nodes = total_burning_nodes
                 best_candidate = candidate
+            
+            # Check min time to reach a node
+            if node_time < min_time:
+                min_time = node_time
+                best_by_time = candidate
 
         print(f"Best candidate: {best_candidate} with {min_burned_nodes} burned nodes")
 
@@ -66,7 +75,13 @@ class Rollout:
             print(f"Firefighter is already protecting node {env.firefighter.protecting_node}")
             return env.firefighter.protecting_node, env.firefighter.get_distance_to_node(env.firefighter.protecting_node)
 
-        return best_candidate[0], best_candidate[1]
+        if num_final_candidates == 1:
+            return best_candidate[0], best_candidate[1]
+        else:
+            # If there are multiple candidates with the same number of burned nodes, return the minimum time to reach
+            if best_by_time:
+                print(f"Best candidate by time: {best_by_time} with {min_time} time")
+                return best_by_time[0], best_by_time[1]
 
     def select_action(self, env, step):
         """

@@ -42,17 +42,6 @@ class TreeVisualizer:
 
         self.add_edges(fig)
 
-        # firefighter_positions = np.array(tree.get_firefighter_positions())
-        # if firefighter_positions.size > 0:
-        #     fig.add_trace(go.Scatter3d(
-        #         x=firefighter_positions[:, 0],
-        #         y=firefighter_positions[:, 1],
-        #         z=firefighter_positions[:, 2],
-        #         mode='markers',
-        #         marker=dict(size=10, color='green'),
-        #         name='Firefighters'
-        #     ))
-
         fig.update_layout(title='3D Tree Structure',
                 scene=dict(
                     xaxis=dict(title='X Axis', range=[-1, 1]),

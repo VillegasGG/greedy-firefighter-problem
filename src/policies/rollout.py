@@ -1,6 +1,6 @@
-import os
-import sys
 from policies.greedy_step import GreedyStep
+from helpers import vizualize_state
+
 import copy
 
 class Rollout:

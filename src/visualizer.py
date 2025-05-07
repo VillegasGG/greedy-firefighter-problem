@@ -53,7 +53,7 @@ class TreeVisualizer:
 
         fig.write_html(img_name + ".html")
 
-    def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes, firefighter_position):
+    def plot_fire_state(self, burning_nodes, burned_nodes, step, protected_nodes, firefighter_position, folder):
         """
         Genera y guarda una imagen 3D del estado actual de la propagación del incendio.
         """
@@ -137,9 +137,9 @@ class TreeVisualizer:
                         width=700, height=700)
 
         # Guardar la imagen
-        fig.write_image(f"images/states/state_{step}.png")
+        fig.write_image(f"{folder}{step}.png")
 
-    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position):
+    def plot_3d_final_state(self, burning_nodes, burned_nodes, protected_nodes, firefighter_position, folder=None, file_name=None):
         """
         Genera y guarda una imagen 3D del estado final de la propagación del incendio.
         """
@@ -223,5 +223,9 @@ class TreeVisualizer:
                 width=900, height=900)
         
         # Guardar html
-        fig.write_html("images/final_state.html")
+        if folder and file_name:
+            fig.write_html(f"{folder}{file_name}.html")
+        else:
+            # Save the figure as an HTML file
+            fig.write_html("images/final_state.html")
 

@@ -1,4 +1,5 @@
 from policies.greedy_step import GreedyStep
+from visualizer import TreeVisualizer
 from helpers import vizualize_state
 
 import copy
@@ -7,7 +8,7 @@ class Rollout:
     def __init__(self, tree):
         self.original_tree = tree
 
-    def get_node_to_protect(self, candidates, env):
+    def get_node_to_protect(self, candidates, env, step):
         # Initialize min burned nodes to a infinity value
         min_burned_nodes = float('inf')
         best_candidate = None
@@ -22,6 +23,8 @@ class Rollout:
             env_copy = copy.deepcopy(env)
             node = candidate[0]
             node_time = candidate[1]
+
+            visualizer = TreeVisualizer(env_copy.tree)
 
             while(env_copy.firefighter.get_remaining_time() > 0 and node_time!= 0):
                 node_time = env_copy.firefighter.get_distance_to_node(node)
@@ -40,6 +43,10 @@ class Rollout:
                     
             # Propagate the fire in the copied environment 
             env_copy.propagate()
+            file_route = "images/rollout/"
+            file_name = f"step_{step}_candidate_{int(candidate[0])}"
+            # vizualize_state(visualizer, env_copy, file_name, file_route)
+            visualizer.plot_3d_final_state(env_copy.state.burning_nodes, env_copy.state.burned_nodes, env_copy.state.protected_nodes, env_copy.firefighter.position, file_route, file_name)
 
             # Save the number of burned nodes in the copied environment
             num_burned_nodes = len(env_copy.state.burned_nodes)
@@ -61,7 +68,7 @@ class Rollout:
 
         return best_candidate[0], best_candidate[1]
 
-    def select_action(self, env):
+    def select_action(self, env, step):
         """
         Selects the best action for the firefighter using a rollout policy.
         """
@@ -70,7 +77,7 @@ class Rollout:
         # Get the candidates for the firefighter action
         candidates = greedy.get_candidates(env)
 
-        node_to_protect, node_time = self.get_node_to_protect(candidates, env)
+        node_to_protect, node_time = self.get_node_to_protect(candidates, env, step)
         print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')
 
         if node_to_protect:

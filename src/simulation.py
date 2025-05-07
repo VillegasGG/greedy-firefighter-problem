@@ -9,16 +9,16 @@ class Simulation:
         self.env = Environment(tree)
         self.policy = policy
 
-    def firefighter_action(self):
+    def firefighter_action(self, step):
         """
         Turno del bombero
         """
         exist_candidate = True
 
         while(self.env.firefighter.get_remaining_time() > 0 and exist_candidate):
-            exist_candidate = self.policy.select_action(self.env)
+            exist_candidate = self.policy.select_action(self.env, step)
             
-    def execute_step(self):
+    def execute_step(self, step):
         """
         Ejecuta un paso de la simulacion:
         A) Si no hay nodos quemados:
@@ -33,7 +33,7 @@ class Simulation:
         if not self.env.state.burning_nodes:
             self.env.start_fire(self.env.tree.root)
         else:
-            self.firefighter_action()
+            self.firefighter_action(step)
             self.env.propagate()
     
     def run_simulation(self, graph=False):
@@ -47,9 +47,9 @@ class Simulation:
         while not self.env.is_completely_burned():
             step += 1
             if step>0: print(f"{'#' * 50}\nWHEN STATE {step-1}:")
-            self.execute_step()
+            self.execute_step(step)
             if graph:
-                vizualize_state(visualizer, self.env, step)
+                vizualize_state(visualizer, self.env, step, "images/states/")
         
         end_time = time.perf_counter()
             

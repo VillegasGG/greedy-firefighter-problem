@@ -8,13 +8,33 @@ class Rollout:
     def __init__(self, tree):
         self.original_tree = tree
 
+    def calcule_best_time(self, candidates, min_burned_nodes):
+        """
+        Calculate the best candidate by time to reach the node.
+        """
+        best_candidate = None
+        min_time = float('inf')
+
+        for candidate in candidates:
+            if candidate[1] == min_burned_nodes:
+                if candidate[0][1] < min_time:
+                    min_time = candidate[0][1]
+                    best_candidate = candidate[0][0]
+
+        return best_candidate, min_time
+
     def get_node_to_protect(self, candidates, env, step):
         # Initialize min burned nodes to a infinity value
         min_burned_nodes = float('inf')
         best_candidate = None
         num_final_candidates = 0
-        min_time = float('inf')
-        best_by_time = None
+        candidate_burned = []
+        protecting_node = env.firefighter.protecting_node
+
+        if protecting_node:
+            print(f"Firefighter is already protecting node {protecting_node}")
+        else:
+            print("Firefighter is not protecting any node")
 
         if(not candidates):
             print('No candidates to protect')
@@ -22,7 +42,6 @@ class Rollout:
         
         for candidate in candidates:
             # Create a copy of the environment to simulate the action
-            # print(f"Simulating action for candidate: {candidate}")
             env_copy = copy.deepcopy(env)
             node = candidate[0]
             node_time = candidate[1]
@@ -56,32 +75,34 @@ class Rollout:
             num_burning_nodes = len(env_copy.state.burning_nodes)
             total_burning_nodes = num_burned_nodes + num_burning_nodes
 
+            candidate_burned.append((candidate, total_burning_nodes))
+
             print(f"Candidate {candidate} results: {total_burning_nodes} burned nodes")
+
 
             # Check if the number of burned nodes is less than the current minimum
             if total_burning_nodes < min_burned_nodes:
-                num_final_candidates += 1
                 min_burned_nodes = total_burning_nodes
                 best_candidate = candidate
-            
-            # Check min time to reach a node
-            if node_time < min_time:
-                min_time = node_time
-                best_by_time = candidate
 
-        print(f"Best candidate: {best_candidate} with {min_burned_nodes} burned nodes")
-
-        if(env.firefighter.protecting_node):
+        # If there are multiple candidates with the same number of burned nodes, select the one with the minimum time to reach
+        for candidate in candidate_burned:
+            if candidate[1] == min_burned_nodes:
+                num_final_candidates += 1
+                
+        if(env.firefighter.protecting_node and env.firefighter.protecting_node != best_candidate[0]):
             print(f"Firefighter is already protecting node {env.firefighter.protecting_node}")
             return env.firefighter.protecting_node, env.firefighter.get_distance_to_node(env.firefighter.protecting_node)
 
         if num_final_candidates == 1:
+            print(f"Best candidate: {best_candidate} with {min_burned_nodes} burned nodes")
             return best_candidate[0], best_candidate[1]
         else:
             # If there are multiple candidates with the same number of burned nodes, return the minimum time to reach
-            if best_by_time:
-                print(f"Best candidate by time: {best_by_time} with {min_time} time")
-                return best_by_time[0], best_by_time[1]
+            print("Multiple candidates with the same number of burned nodes")
+            best = self.calcule_best_time(candidate_burned, min_burned_nodes)
+            print(f"Best candidate by time: {best}")
+            return best[0], best[1]
 
     def select_action(self, env, step):
         """
@@ -95,7 +116,7 @@ class Rollout:
         node_to_protect, node_time = self.get_node_to_protect(candidates, env, step)
         print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')
 
-        if node_to_protect:
+        if node_to_protect is not None:
             node_pos = env.tree.nodes_positions[node_to_protect]
             if(env.firefighter.get_remaining_time() >= node_time):
                 env.state.protected_nodes.add(node_to_protect)

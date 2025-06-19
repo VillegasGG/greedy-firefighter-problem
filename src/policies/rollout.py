@@ -1,4 +1,5 @@
-from policies.greedy_step import GreedyStep
+from greedyff.greedy_sim import GreedyStep
+from greedyff.get_candidates_utils import get_candidates
 from visualizer import TreeVisualizer
 from helpers import vizualize_state
 
@@ -111,7 +112,7 @@ class Rollout:
         greedy = GreedyStep(self.original_tree)
         
         # Get the candidates for the firefighter action
-        candidates = greedy.get_candidates(env)
+        candidates = get_candidates(env.tree, env.state, env.firefighter)
 
         node_to_protect, node_time = self.get_node_to_protect(candidates, env, step)
         print(f'Node to protect: {node_to_protect} | Time to reach: {node_time}')

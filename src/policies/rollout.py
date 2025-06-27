@@ -1,5 +1,6 @@
 from greedyff.greedy_sim import GreedyStep
 from greedyff.get_candidates_utils import get_candidates
+from greedyff.greedy_sim import GreedySim
 from visualizer import TreeVisualizer
 from helpers import vizualize_state
 
@@ -43,67 +44,21 @@ class Rollout:
         
         for candidate in candidates:
             # Create a copy of the environment to simulate the action
+            print(f"Creating a copy of the environment for candidate {candidate[0]} with time {candidate[1]}")
             env_copy = copy.deepcopy(env)
             node = candidate[0]
             node_time = candidate[1]
+            ff_speed = env.firefighter.speed
+            output_dir_name = f"output/rollout/step_{step}_node_{node}_time_{node_time}"
 
-            visualizer = TreeVisualizer(env_copy.tree)
+            greedy_sim = GreedySim(env=env_copy, ff_speed=ff_speed, output_dir=output_dir_name)
+            print(f"Simulating action for node {node} with time {node_time}")
+            # Simulate the action of protecting the node
+            greedy_sim.run()
+            print(len(greedy_sim.state.burned_nodes), "burned nodes after simulation")
+        
+        return
 
-            while(env_copy.firefighter.get_remaining_time() > 0 and node_time!= 0):
-                node_time = env_copy.firefighter.get_distance_to_node(node)
-                node_position = env_copy.tree.nodes_positions[node]
-
-                # print(f"Firefighter position: {env_copy.firefighter.position} | Node position: {node_position} | Time to reach: {node_time}")
-                # print(f"Firefighter remaining time: {env_copy.firefighter.get_remaining_time()}")
-
-                if(env_copy.firefighter.get_remaining_time() >= node_time):
-                    env_copy.state.protected_nodes.add(node)
-                    env_copy.firefighter.move_to_node(node_position, node_time)
-                    env_copy.firefighter.protecting_node = None
-                else:
-                    env_copy.firefighter.move_fraction(node_position)
-                    env_copy.firefighter.protecting_node = node
-                    
-            # Propagate the fire in the copied environment 
-            env_copy.propagate()
-            file_route = "images/rollout/"
-            file_name = f"step_{step}_candidate_{int(candidate[0])}"
-            # vizualize_state(visualizer, env_copy, file_name, file_route)
-            visualizer.plot_3d_final_state(env_copy.state.burning_nodes, env_copy.state.burned_nodes, env_copy.state.protected_nodes, env_copy.firefighter.position, file_route, file_name)
-
-            # Save the number of burned nodes in the copied environment
-            num_burned_nodes = len(env_copy.state.burned_nodes)
-            num_burning_nodes = len(env_copy.state.burning_nodes)
-            total_burning_nodes = num_burned_nodes + num_burning_nodes
-
-            candidate_burned.append((candidate, total_burning_nodes))
-
-            print(f"Candidate {candidate} results: {total_burning_nodes} burned nodes")
-
-
-            # Check if the number of burned nodes is less than the current minimum
-            if total_burning_nodes < min_burned_nodes:
-                min_burned_nodes = total_burning_nodes
-                best_candidate = candidate
-
-        # If there are multiple candidates with the same number of burned nodes, select the one with the minimum time to reach
-        for candidate in candidate_burned:
-            if candidate[1] == min_burned_nodes:
-                num_final_candidates += 1
-                
-        if(env.firefighter.protecting_node and env.firefighter.protecting_node != best_candidate[0]):
-            print(f"Firefighter is already protecting node {env.firefighter.protecting_node}")
-            return env.firefighter.protecting_node, env.firefighter.get_distance_to_node(env.firefighter.protecting_node)
-
-        if num_final_candidates == 1:
-            print(f"Best candidate: {best_candidate} with {min_burned_nodes} burned nodes")
-            return best_candidate[0], best_candidate[1]
-        else:
-            # If there are multiple candidates with the same number of burned nodes, return the minimum time to reach
-            print("Multiple candidates with the same number of burned nodes")
-            best = self.calcule_best_time(candidate_burned, min_burned_nodes)
-            print(f"Best candidate by time: {best}")
-            return best[0], best[1]
 
     def select_action(self, env, step):
         """
